@@ -2,20 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Wumpus : MonoBehaviour, CellEffect
+public class Smell : MonoBehaviour, CellEffect
 {
-    public int Damage;
-
-    private int Health;
-
     // Use this for initialization
     void Start ()
     {
-        Health = 100;
+		
 	}
 
     public void Action()
     {
-        GM.GetAgent().GetComponent<Agent>().Damage(Damage);
+        GM.GetAgent().GetComponent<Agent>().Perceive("Smell");
     }
 }

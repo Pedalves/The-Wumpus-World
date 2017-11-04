@@ -5,6 +5,9 @@ TagManager:
   serializedVersion: 2
   tags:
   - Agent
+  - Wumpus
+  - Obstacle
+  - Gold
   layers:
   - Default
   - TransparentFX

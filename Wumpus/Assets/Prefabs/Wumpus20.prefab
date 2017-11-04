@@ -25,7 +25,7 @@ GameObject:
   - component: {fileID: 114364007424033164}
   m_Layer: 0
   m_Name: Wumpus20
-  m_TagString: Agent
+  m_TagString: Wumpus
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

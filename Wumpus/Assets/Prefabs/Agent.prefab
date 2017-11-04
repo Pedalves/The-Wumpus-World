@@ -195,3 +195,4 @@ MonoBehaviour:
   MapObj: {fileID: 0}
   CurrentCell: {fileID: 0}
   Health: 0
+  Controllable: 1

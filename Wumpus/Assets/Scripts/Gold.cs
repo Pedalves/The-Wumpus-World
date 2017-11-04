@@ -2,15 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Gold : MonoBehaviour,CellEffect {
-
+public class Gold : MonoBehaviour,CellEffect
+{
 	// Use this for initialization
-	void Start () {
+	void Start ()
+    {
 		
 	}
 
     public void Action()
     {
-
+        GM.GetAgent().GetComponent<Agent>().Perceive("Shiny");
     }
 }

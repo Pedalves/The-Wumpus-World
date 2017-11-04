@@ -15,10 +15,10 @@ public class Agent : MonoBehaviour
     public GameObject MapObj;
     public GameObject CurrentCell;
     public int Health;
-    public bool Controlable;
+    public bool Controllable;
+    public int Points;
 
     private Vector2 _pos;
-    private int _points;
     private int _ammunition;
     private Direction _direction;
 
@@ -26,7 +26,7 @@ public class Agent : MonoBehaviour
     void Start()
     {
         Health = 100;
-        _points = 0;
+        Points = 0;
         _pos = Vector2.zero;
         _ammunition = 5;
         _direction = Direction.Up;
@@ -36,7 +36,7 @@ public class Agent : MonoBehaviour
 
     private void Update()
     {
-        if(Controlable)
+        if (Controllable && GM.GetGameRunning())
         {
             if (Input.GetKeyDown(KeyCode.UpArrow))
             {
@@ -75,8 +75,8 @@ public class Agent : MonoBehaviour
 
     void Move()
     {
-        _points--;
-        GameObject tmpCell = null;
+        Points--;
+        Cell tmpCell = null;
         Vector2 tmpPos = _pos;
 
         switch (_direction)
@@ -103,7 +103,9 @@ public class Agent : MonoBehaviour
 
         if(tmpCell)
         {
-            CurrentCell = tmpCell;
+            CurrentCell = tmpCell.gameObject;
+            CurrentCell.GetComponent<Cell>().AgentIn();
+
             transform.position = new Vector3(CurrentCell.transform.position.x, transform.position.y, CurrentCell.transform.position.z);
             _pos = tmpPos;
         }
@@ -111,7 +113,7 @@ public class Agent : MonoBehaviour
 
     void TurnRight()
     {
-        _points--;
+        Points--;
 
         transform.Rotate(Vector3.up, 90f);
         switch(_direction)
@@ -135,7 +137,7 @@ public class Agent : MonoBehaviour
 
     void TurnLeft()
     {
-        _points--;
+        Points--;
 
         transform.Rotate(Vector3.up, -90f);
         switch (_direction)
@@ -159,10 +161,10 @@ public class Agent : MonoBehaviour
 
     void Climb()
     {
-        _points--;
+        Points--;
         if (_pos.x == 0 && _pos.y == 0)
         {
-
+            GM.SetGameRunning(false);
         }
         else
         {
@@ -172,15 +174,15 @@ public class Agent : MonoBehaviour
 
     void Grab()
     {
-        _points--;
+        Points--;
     }
 
     void Shoot()
     {
         if(_ammunition > 0)
         {
-            _points--;
-            _points -= 10;
+            Points--;
+            Points -= 10;
             _ammunition--;
             int damage = Random.Range(20, 51);
 
@@ -192,15 +194,20 @@ public class Agent : MonoBehaviour
         }
     }
 
-    void Damage(int damage)
+    public void Damage(int damage)
     {
         Health -= damage;
-        _points -= damage;
+        Points -= damage;
 
         if (Health <= 0)
         {
-            _points -= 1000;
-            GM.GetInstance().GameRunning = false;
+            Points -= 1000;
+            GM.SetGameRunning(false);
         }
+    }
+
+    public void Perceive(string str)
+    {
+        Debug.Log(str);
     }
 }
