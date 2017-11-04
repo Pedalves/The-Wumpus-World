@@ -12,6 +12,6 @@ public class Gold : MonoBehaviour,CellEffect
 
     public void Action()
     {
-        GM.GetAgent().GetComponent<Agent>().Perceive("Shiny");
+        GM.GetInstance().GetAgent().Perceive("Shiny");
     }
 }

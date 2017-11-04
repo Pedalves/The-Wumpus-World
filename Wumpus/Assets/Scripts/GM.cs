@@ -7,9 +7,11 @@ using UnityEngine.SceneManagement;
 public class GM : MonoBehaviour
 {
     public GameObject GameOverText;
+    public Text PointsText;
 
     [SerializeField]
     private bool _gameRunning;
+    private Agent _agent;
 
     static private GM _instance;
 
@@ -31,30 +33,39 @@ public class GM : MonoBehaviour
         _gameRunning = true;	
 	}
 
+    private void Update()
+    {
+        PointsText.text = "Points: " + GetAgent().Points;
+    }
+
     static public GM GetInstance()
     {
         return _instance;
     }
 
-    static public GameObject GetAgent()
+    public Agent GetAgent()
     {
-        return GameObject.FindGameObjectWithTag("Agent");
+        if(!_agent)
+        {
+            _agent = GameObject.FindGameObjectWithTag("Agent").GetComponent<Agent>();
+        }
+        return _agent;
     }
 
-    static public bool GetGameRunning()
+    public bool GetGameRunning()
     {
-        return GetInstance()._gameRunning;
+        return _gameRunning;
     }
 
-    static public void SetGameRunning(bool running)
+    public void SetGameRunning(bool running)
     {
-        GetInstance()._gameRunning = running;
+        _gameRunning = running;
 
         if(!running)
         {
-            GetInstance().GameOverText.SetActive(true);
-            GetInstance().GameOverText.GetComponent<Text>().text = "Game Over\nPoints: " + GM.GetAgent().GetComponent<Agent>().Points;
-            GetInstance().StartCoroutine(GetInstance().Restart());
+            GameOverText.SetActive(true);
+            GameOverText.GetComponent<Text>().text = "Game Over\nPoints: " + GetAgent().Points;
+            StartCoroutine(GetInstance().Restart());
         }
     }
 
@@ -62,5 +73,10 @@ public class GM : MonoBehaviour
     {
         yield return new WaitForSeconds(3);
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    public void UpdatePoints(int points)
+    {
+        PointsText.text = "Points: " + points;
     }
 }

@@ -36,7 +36,7 @@ public class Agent : MonoBehaviour
 
     private void Update()
     {
-        if (Controllable && GM.GetGameRunning())
+        if (Controllable && GM.GetInstance().GetGameRunning())
         {
             if (Input.GetKeyDown(KeyCode.UpArrow))
             {
@@ -164,7 +164,7 @@ public class Agent : MonoBehaviour
         Points--;
         if (_pos.x == 0 && _pos.y == 0)
         {
-            GM.SetGameRunning(false);
+            GM.GetInstance().SetGameRunning(false);
         }
         else
         {
@@ -175,6 +175,8 @@ public class Agent : MonoBehaviour
     void Grab()
     {
         Points--;
+
+        //CurrentCell
     }
 
     void Shoot()
@@ -194,15 +196,18 @@ public class Agent : MonoBehaviour
         }
     }
 
-    public void Damage(int damage)
+    public void ReceiveDamage(int damage, bool wumpus = false)
     {
         Health -= damage;
-        Points -= damage;
+        if(wumpus)
+        {
+            Points -= damage;
+        }
 
         if (Health <= 0)
         {
             Points -= 1000;
-            GM.SetGameRunning(false);
+            GM.GetInstance().SetGameRunning(false);
         }
     }
 

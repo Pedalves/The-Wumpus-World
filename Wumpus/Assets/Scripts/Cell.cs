@@ -8,14 +8,13 @@ public class Cell : MonoBehaviour
 
 	public void AgentIn()
     {
-        CellEffect cellEffect = GetComponent<CellEffect>();
-        if (transform.childCount > 0)
+        CellEffect[] cellEffects = GetComponentsInChildren<CellEffect>();
+        if(cellEffects.Length > 0)
         {
-            GetComponentInChildren<CellEffect>().Action();
-        }
-        else if(cellEffect != null)
-        {
-            cellEffect.Action();
+            foreach(CellEffect fx in cellEffects)
+            {
+                fx.Action();
+            }
         }
     }
 

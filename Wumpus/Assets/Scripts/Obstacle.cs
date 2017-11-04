@@ -12,6 +12,6 @@ public class Obstacle : MonoBehaviour, CellEffect
 
     public void Action()
     {
-        GM.GetAgent().GetComponent<Agent>().Damage(1000);
+        GM.GetInstance().GetAgent().ReceiveDamage(1000);
     }
 }

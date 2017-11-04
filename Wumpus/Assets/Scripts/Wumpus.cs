@@ -16,6 +16,20 @@ public class Wumpus : MonoBehaviour, CellEffect
 
     public void Action()
     {
-        GM.GetAgent().GetComponent<Agent>().Damage(Damage);
+        GM.GetInstance().GetAgent().ReceiveDamage(Damage, true);
+    }
+
+    public void ReceiveDamage(int damage)
+    {
+        Health -= damage;
+
+        if(Health <= 0)
+        {
+            Vector2 tmp = transform.parent.gameObject.GetComponent<Cell>().Pos;
+            Debug.Log("Wumpus died at [" + tmp.x + "," + tmp.y + "]");
+            GM.GetInstance().GetAgent().Perceive("Scream");
+
+            Destroy(gameObject);
+        }
     }
 }
