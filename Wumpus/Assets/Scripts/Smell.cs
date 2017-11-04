@@ -14,4 +14,9 @@ public class Smell : MonoBehaviour, CellEffect
     {
         GM.GetInstance().GetAgent().Perceive("Smell");
     }
+
+    public void Interact()
+    {
+
+    }
 }

@@ -176,7 +176,7 @@ public class Agent : MonoBehaviour
     {
         Points--;
 
-        //CurrentCell
+        CurrentCell.GetComponent<Cell>().AgentInteract();
     }
 
     void Shoot()
@@ -214,5 +214,10 @@ public class Agent : MonoBehaviour
     public void Perceive(string str)
     {
         Debug.Log(str);
+    }
+
+    public void UpdatePoints(int points)
+    {
+        Points += points;
     }
 }

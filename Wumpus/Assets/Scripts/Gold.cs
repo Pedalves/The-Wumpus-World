@@ -14,4 +14,10 @@ public class Gold : MonoBehaviour,CellEffect
     {
         GM.GetInstance().GetAgent().Perceive("Shiny");
     }
+
+    public void Interact()
+    {
+        GM.GetInstance().GetAgent().UpdatePoints(1000);
+        Destroy(gameObject);
+    }
 }

@@ -14,4 +14,9 @@ public class Breeze : MonoBehaviour, CellEffect
     {
         GM.GetInstance().GetAgent().Perceive("Breeze");
     }
+
+    public void Interact()
+    {
+
+    }
 }

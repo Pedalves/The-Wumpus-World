@@ -14,4 +14,9 @@ public class Obstacle : MonoBehaviour, CellEffect
     {
         GM.GetInstance().GetAgent().ReceiveDamage(1000);
     }
+
+    public void Interact()
+    {
+
+    }
 }

@@ -5,4 +5,5 @@ using UnityEngine;
 public interface CellEffect {
 
     void Action();
+    void Interact();
 }

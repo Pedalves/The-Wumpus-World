@@ -19,6 +19,11 @@ public class Wumpus : MonoBehaviour, CellEffect
         GM.GetInstance().GetAgent().ReceiveDamage(Damage, true);
     }
 
+    public void Interact()
+    {
+
+    }
+
     public void ReceiveDamage(int damage)
     {
         Health -= damage;
