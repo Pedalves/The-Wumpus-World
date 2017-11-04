@@ -31,6 +31,7 @@ public class Map : MonoBehaviour
                 GameObject go = Instantiate(Cell, transform.position, Cell.transform.rotation, transform);
                 go.transform.position += i * Vector3.right * Size;
                 go.transform.position += j * Vector3.forward * Size;
+                go.GetComponent<Cell>().Pos = new Vector2(i, j);
                 _map[i, j] = go;
             }
         }
@@ -48,7 +49,7 @@ public class Map : MonoBehaviour
 
     public GameObject GetCell(int i, int j)
     {
-        if(i >= Width || i <= 0 || j >= Height || j <= 0)
+        if(i >= Width || i < 0 || j >= Height || j < 0)
         {
             return null;
         }

@@ -15,6 +15,7 @@ public class Agent : MonoBehaviour
     public GameObject MapObj;
     public GameObject CurrentCell;
     public int Health;
+    public bool Controlable;
 
     private Vector2 _pos;
     private int _points;
@@ -33,6 +34,37 @@ public class Agent : MonoBehaviour
         StartCoroutine(CheckNextMove());
     }
 
+    private void Update()
+    {
+        if(Controlable)
+        {
+            if (Input.GetKeyDown(KeyCode.UpArrow))
+            {
+                Move();
+            }
+            else if (Input.GetKeyDown(KeyCode.LeftArrow))
+            {
+                TurnLeft();
+            }
+            else if (Input.GetKeyDown(KeyCode.RightArrow))
+            {
+                TurnRight();
+            }
+            else if (Input.GetKeyDown(KeyCode.C))
+            {
+                Climb();
+            }
+            else if (Input.GetKeyDown(KeyCode.G))
+            {
+                Grab();
+            }
+            else if (Input.GetKeyDown(KeyCode.Space))
+            {
+                Shoot();
+            }
+        }
+    }
+
     IEnumerator CheckNextMove()
     {
         while (Health > 0)
@@ -45,29 +77,35 @@ public class Agent : MonoBehaviour
     {
         _points--;
         GameObject tmpCell = null;
+        Vector2 tmpPos = _pos;
 
         switch (_direction)
         {
             case Direction.Up:
-                tmpCell = MapObj.GetComponent<Map>().GetCell((int)(_pos.x), (int)(_pos.y + 1));
+                tmpPos = new Vector2(_pos.x, _pos.y + 1);
+                tmpCell = MapObj.GetComponent<Map>().GetCell((int)(tmpPos.x), (int)(tmpPos.y));
                 break;
             case Direction.Down:
-                tmpCell = MapObj.GetComponent<Map>().GetCell((int)(_pos.x), (int)(_pos.y));
+                tmpPos = new Vector2(_pos.x, _pos.y - 1);
+                tmpCell = MapObj.GetComponent<Map>().GetCell((int)(tmpPos.x), (int)(tmpPos.y));
                 break;
             case Direction.Left:
-                tmpCell = MapObj.GetComponent<Map>().GetCell((int)(_pos.x), (int)(_pos.y));
+                tmpPos = new Vector2(_pos.x - 1, _pos.y);
+                tmpCell = MapObj.GetComponent<Map>().GetCell((int)(tmpPos.x), (int)(tmpPos.y));
                 break;
             case Direction.Right:
-                tmpCell = MapObj.GetComponent<Map>().GetCell((int)(_pos.x), (int)(_pos.y));
+                tmpPos = new Vector2(_pos.x + 1, _pos.y);
+                tmpCell = MapObj.GetComponent<Map>().GetCell((int)(tmpPos.x), (int)(tmpPos.y));
                 break;
             default:
                 break;
         }
 
-        if(CurrentCell)
+        if(tmpCell)
         {
             CurrentCell = tmpCell;
             transform.position = new Vector3(CurrentCell.transform.position.x, transform.position.y, CurrentCell.transform.position.z);
+            _pos = tmpPos;
         }
     }
 
@@ -139,11 +177,19 @@ public class Agent : MonoBehaviour
 
     void Shoot()
     {
-        _points--;
-        _points -= 10;
-        int damage = Random.Range(20, 51);
+        if(_ammunition > 0)
+        {
+            _points--;
+            _points -= 10;
+            _ammunition--;
+            int damage = Random.Range(20, 51);
 
-        //TODO: send damage foward
+            //TODO: send damage foward
+        }
+        else
+        {
+            Debug.Log("No ammo");
+        }
     }
 
     void Damage(int damage)
