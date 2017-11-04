@@ -19,4 +19,9 @@ public class Breeze : MonoBehaviour, CellEffect
     {
 
     }
+
+    public void Damage(int damage)
+    {
+
+    }
 }

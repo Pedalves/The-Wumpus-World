@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Wumpus : MonoBehaviour, CellEffect
 {
-    public int Damage;
+    public int DamagePoints;
 
     private int Health;
 
@@ -16,7 +16,7 @@ public class Wumpus : MonoBehaviour, CellEffect
 
     public void Action()
     {
-        GM.GetInstance().GetAgent().ReceiveDamage(Damage, true);
+        GM.GetInstance().GetAgent().ReceiveDamage(DamagePoints, true);
     }
 
     public void Interact()
@@ -24,11 +24,11 @@ public class Wumpus : MonoBehaviour, CellEffect
 
     }
 
-    public void ReceiveDamage(int damage)
+    public void Damage(int damage)
     {
         Health -= damage;
 
-        if(Health <= 0)
+        if (Health <= 0)
         {
             Vector2 tmp = transform.parent.gameObject.GetComponent<Cell>().Pos;
             Debug.Log("Wumpus died at [" + tmp.x + "," + tmp.y + "]");

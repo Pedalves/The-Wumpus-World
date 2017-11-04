@@ -19,4 +19,9 @@ public class Obstacle : MonoBehaviour, CellEffect
     {
 
     }
+
+    public void Damage(int damage)
+    {
+
+    }
 }

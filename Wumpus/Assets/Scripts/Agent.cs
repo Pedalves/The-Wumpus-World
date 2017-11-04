@@ -79,27 +79,7 @@ public class Agent : MonoBehaviour
         Cell tmpCell = null;
         Vector2 tmpPos = _pos;
 
-        switch (_direction)
-        {
-            case Direction.Up:
-                tmpPos = new Vector2(_pos.x, _pos.y + 1);
-                tmpCell = MapObj.GetComponent<Map>().GetCell((int)(tmpPos.x), (int)(tmpPos.y));
-                break;
-            case Direction.Down:
-                tmpPos = new Vector2(_pos.x, _pos.y - 1);
-                tmpCell = MapObj.GetComponent<Map>().GetCell((int)(tmpPos.x), (int)(tmpPos.y));
-                break;
-            case Direction.Left:
-                tmpPos = new Vector2(_pos.x - 1, _pos.y);
-                tmpCell = MapObj.GetComponent<Map>().GetCell((int)(tmpPos.x), (int)(tmpPos.y));
-                break;
-            case Direction.Right:
-                tmpPos = new Vector2(_pos.x + 1, _pos.y);
-                tmpCell = MapObj.GetComponent<Map>().GetCell((int)(tmpPos.x), (int)(tmpPos.y));
-                break;
-            default:
-                break;
-        }
+        GetNextCell(ref tmpPos, ref tmpCell);
 
         if(tmpCell)
         {
@@ -187,12 +167,42 @@ public class Agent : MonoBehaviour
             Points -= 10;
             _ammunition--;
             int damage = Random.Range(20, 51);
+            
+            Cell tmpCell = null;
+            Vector2 tmpPos = _pos;
 
-            //TODO: send damage foward
+            GetNextCell(ref tmpPos, ref tmpCell);
+
+            tmpCell.AgentDamage(damage);
         }
         else
         {
             Debug.Log("No ammo");
+        }
+    }
+
+    void GetNextCell(ref Vector2 tmpPos, ref Cell tmpCell)
+    {
+        switch (_direction)
+        {
+            case Direction.Up:
+                tmpPos = new Vector2(_pos.x, _pos.y + 1);
+                tmpCell = MapObj.GetComponent<Map>().GetCell((int)(tmpPos.x), (int)(tmpPos.y));
+                break;
+            case Direction.Down:
+                tmpPos = new Vector2(_pos.x, _pos.y - 1);
+                tmpCell = MapObj.GetComponent<Map>().GetCell((int)(tmpPos.x), (int)(tmpPos.y));
+                break;
+            case Direction.Left:
+                tmpPos = new Vector2(_pos.x - 1, _pos.y);
+                tmpCell = MapObj.GetComponent<Map>().GetCell((int)(tmpPos.x), (int)(tmpPos.y));
+                break;
+            case Direction.Right:
+                tmpPos = new Vector2(_pos.x + 1, _pos.y);
+                tmpCell = MapObj.GetComponent<Map>().GetCell((int)(tmpPos.x), (int)(tmpPos.y));
+                break;
+            default:
+                break;
         }
     }
 

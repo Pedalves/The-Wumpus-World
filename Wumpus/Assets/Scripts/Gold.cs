@@ -20,4 +20,9 @@ public class Gold : MonoBehaviour,CellEffect
         GM.GetInstance().GetAgent().UpdatePoints(1000);
         Destroy(gameObject);
     }
+
+    public void Damage(int damage)
+    {
+
+    }
 }

@@ -30,4 +30,16 @@ public class Cell : MonoBehaviour
         }
     }
 
+    public void AgentDamage(int damage)
+    {
+        CellEffect[] cellEffects = GetComponentsInChildren<CellEffect>();
+        if (cellEffects.Length > 0)
+        {
+            foreach (CellEffect fx in cellEffects)
+            {
+                fx.Damage(damage);
+            }
+        }
+    }
+
 }

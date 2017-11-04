@@ -19,4 +19,9 @@ public class Smell : MonoBehaviour, CellEffect
     {
 
     }
+
+    public void Damage(int damage)
+    {
+        
+    }
 }

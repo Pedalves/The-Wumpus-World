@@ -6,4 +6,5 @@ public interface CellEffect {
 
     void Action();
     void Interact();
+    void Damage(int damage);
 }
