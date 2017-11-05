@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 33874404737431738}
   - component: {fileID: 65349508340555760}
   - component: {fileID: 23666860924554992}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: FPS Screen
   m_TagString: Untagged
   m_Icon: {fileID: 0}

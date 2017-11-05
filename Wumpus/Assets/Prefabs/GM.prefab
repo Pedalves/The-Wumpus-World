@@ -51,3 +51,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b60ea9439d7fb64fb95bd60194a04c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  GameOverText: {fileID: 0}
+  PointsText: {fileID: 0}
+  _gameRunning: 0
