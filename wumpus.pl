@@ -1,14 +1,42 @@
-start_pos(1/1).
+%declaracao_das_variaveis_dinamicas.
+:- dynamic(
+            [agent_location/1],
+            [agent_health/1],
+            [agent_points/1],
+            [pit/1],
+            [caiu/2],
+            [assume/1] ).
+start :-
+    init_agent,
+    init_world.
 
-:- dynamic([agent_location/1]).
+derrota :-
+    format("\n O aventureiro encontrou um fim inesperado.").
+    
 
 init_agent :-
     retractall(agent_location(_)),
-    assert(agent_location([1,1])).
+    retractall(agent_health(_)),
+    retractall(agent_points(_)),
+    assert(agent_location([0,0])),
+    assert(agent_health([100])),
+    assert(agent_points([100])).
+
+init_world :-
+    retractall(pit(_)),
+    retractall(gold(_)),
+    assert(pit([1,0])),
+    assert(gold([0,1])),
+
+
     
 show :- 
     agent_location([X,Y]),
-    format("coluna ~p e linha ~p", [X,Y]).
+    agent_health([H]),
+    agent_points([P]),
+    format("\nSaude: ~p \n", [H]),
+    format("Posicao: coluna ~p e linha ~p", [X,Y]),
+    format("\nPontuacao: ~p", [P]).
 
 update_agent_location([X1,Y1]) :-
     agent_location([X,Y]),
