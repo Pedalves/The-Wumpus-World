@@ -3,6 +3,7 @@
             [agent_location/1],
             [agent_health/1],
             [agent_points/1],
+            [agent_rotation/1],
             [pit_location/1],
             [gold/1],
             [assume/1] ).
@@ -12,15 +13,17 @@ start :-
 
 derrota :-
     format("\n O aventureiro encontrou um fim inesperado.").
-    
+
 
 init_agent :-
     retractall(agent_location(_)),
     retractall(agent_health(_)),
     retractall(agent_points(_)),
+    retractall(agent_rotation(_)),
     assert(agent_location([0,0])),
     assert(agent_health([100])),
-    assert(agent_points([100])).
+    assert(agent_points([100])),
+    assert(agent_rotation([1])).
 
 init_world :-
     retractall(pit_location(_)),
@@ -32,8 +35,8 @@ init_world :-
 
 is_pit(yes, [X,Y]) :- pit_location([X,Y]).
 is_pit(no, [X,Y]).
-    
-show :- 
+
+show :-
     agent_location([X,Y]),
     agent_health([H]),
     agent_points([P]),
@@ -46,6 +49,12 @@ update_agent_location([X1,Y1]) :-
     retractall( agent_location(_) ),
     assert( agent_location([X1,Y1]) ),
     format("\nEstou na coluna ~p e na linha ~p\n", [X1, Y1]).
+
+update_agent_rotation([X1]) :-
+    agent_rotation([X]),
+    retractall( agent_rotation(_) ),
+    assert( agent_location([X1]) ),
+    format("\nEstou olhando para ~p\n", [X1]).
 
 update_health([H]) :-
     agent_health([V]),
@@ -67,7 +76,7 @@ teste :-
 lugar_prox([X,Y], 0, [X2, Y]) :- X2 is X+1.
 lugar_prox([X,Y], 1, [X, Y2]) :- Y2 is Y+1.
 lugar_prox([X,Y], 2, [X2, Y]) :- X2 is X-1.
-lugar_prox([X,Y], 3, [X, Y2]) :- Y2 is Y+1.
+lugar_prox([X,Y], 3, [X, Y2]) :- Y2 is Y-1.
 
 move_up :-
     agent_location([X,Y]),
@@ -93,5 +102,27 @@ move_right :-
     update_agent_location([X1,Y]),
     teste.
 
-%Adjacente(X1,X2) :- lugar_prox(X1,0,X2).
+move :-
+    agent_location([X,Y]),
+    agent_rotation([R]),
+    ((R == 0)->(X1 is X+1),Y1 is Y;
+    (R == 1)->(X1 is X),Y1 is Y+1;
+    (R == 2)->(X1 is X-1),Y1 is Y;
+    (R == 3)->(X1 is X),Y1 is Y-1;
+    true),
+    update_agent_location([X1,Y1]),
+    teste.
 
+turn_left :-
+    agent_rotation([X]),
+    X1 is X+1,
+    ((X1 == 4)->(X1 is 0);true),
+    update_agent_rotation([X1]).
+
+turn_right :-
+    agent_rotation([X]),
+    X1 is X-1,
+    ((X1 == -1)->(X1 is 3);true),
+    update_agent_rotation([X1]).
+
+%Adjacente(X1,X2) :- lugar_prox(X1,0,X2).
