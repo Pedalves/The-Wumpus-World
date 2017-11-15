@@ -31,32 +31,16 @@ public class GM : MonoBehaviour
             Environment.SetEnvironmentVariable("Path", Environment.GetEnvironmentVariable("Path") + @";C:\Program Files (x86)\swipl;C:\Program Files (x86)\swipl\bin");
             if (!PlEngine.IsInitialized)
             {
-                Debug.Log("entrou");
-                String[] param = { "-q" };  // suppressing informational and banner messages
+                TextAsset textAsset = Resources.Load("wumpus") as TextAsset;
+                Debug.Log(textAsset);
+                Debug.Log("Path:");
+                Debug.Log(Application.dataPath + "/Resources/wumpus.pl");
+                String[] param = { "-q", "-f", Application.dataPath + "/Resources/wumpus.pl" };
                 PlEngine.Initialize(param);
-                PlQuery.PlCall("assert(father(martin, inka))");
-                PlQuery.PlCall("assert(father(uwe, gloria))");
-                PlQuery.PlCall("assert(father(uwe, melanie))");
-                PlQuery.PlCall("assert(father(uwe, ayala))");
-                using (var q = new PlQuery("father(P, C), atomic_list_concat([P,' is_father_of ',C], L)"))
-                {
-                    foreach (PlQueryVariables v in q.SolutionVariables)
-                    {
-                        Debug.Log(v["L"].ToString());
-                        ConsoleText.text += v["L"].ToString() + "\n";
-                    }
-
-                    Debug.Log("all children from uwe:");
-                    ConsoleText.text += "all children from uwe:" + "\n";
-                    q.Variables["P"].Unify("uwe");
-                    foreach (PlQueryVariables v in q.SolutionVariables)
-                    {
-                        Debug.Log(v["C"].ToString());
-                        ConsoleText.text += v["C"].ToString() + "\n";
-                    }
-                }
-                PlEngine.PlCleanup();
-                Debug.Log("finshed!");
+                PlQuery.PlCall("assert(start:-format('zvsf'))");
+                PlQuery c = new PlQuery("start");
+                c.NextSolution();
+                //getNextAction();
             }
         }
     }
@@ -106,11 +90,22 @@ public class GM : MonoBehaviour
     IEnumerator Restart()
     {
         yield return new WaitForSeconds(3);
+        PlEngine.PlCleanup();
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     public void UpdatePoints(int points)
     {
         PointsText.text = "Points: " + points;
+    }
+
+    public string getNextAction()
+    {
+        PlQuery actionQuery = new PlQuery("move_up");
+        actionQuery.NextSolution();
+        foreach (PlQueryVariables v in actionQuery.SolutionVariables)
+            Console.WriteLine(v["X"].ToString());
+
+        return "";
     }
 }
