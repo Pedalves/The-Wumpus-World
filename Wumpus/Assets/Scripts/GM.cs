@@ -9,6 +9,7 @@ public class GM : MonoBehaviour
 {
     public GameObject GameOverText;
     public Text PointsText;
+    public Text ConsoleText;
 
     [SerializeField]
     private bool _gameRunning;
@@ -40,12 +41,19 @@ public class GM : MonoBehaviour
                 using (var q = new PlQuery("father(P, C), atomic_list_concat([P,' is_father_of ',C], L)"))
                 {
                     foreach (PlQueryVariables v in q.SolutionVariables)
+                    {
                         Debug.Log(v["L"].ToString());
+                        ConsoleText.text += v["L"].ToString() + "\n";
+                    }
 
                     Debug.Log("all children from uwe:");
+                    ConsoleText.text += "all children from uwe:" + "\n";
                     q.Variables["P"].Unify("uwe");
                     foreach (PlQueryVariables v in q.SolutionVariables)
+                    {
                         Debug.Log(v["C"].ToString());
+                        ConsoleText.text += v["C"].ToString() + "\n";
+                    }
                 }
                 PlEngine.PlCleanup();
                 Debug.Log("finshed!");

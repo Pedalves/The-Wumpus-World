@@ -1,0 +1,150 @@
+Initialize engine version: 5.6.4f1 (ac7086b8d112)
+GfxDevice: creating device client; threaded=1
+Direct3D:
+    Version:  Direct3D 11.0 [level 11.1]
+    Renderer: AMD Radeon (TM) R9 200 Series (ID=0x6811)
+    Vendor:   ATI
+    VRAM:     2028 MB
+    Driver:   22.19.662.4
+Begin MonoManager ReloadAssembly
+Platform assembly: E:\Lipe\PUC #\8º Período\ia\Wumpus\Build\wumpus_Data\Managed\UnityEngine.dll (this message is harmless)
+Loading E:\Lipe\PUC #\8º Período\ia\Wumpus\Build\wumpus_Data\Managed\UnityEngine.dll into Unity Child Domain
+Platform assembly: E:\Lipe\PUC #\8º Período\ia\Wumpus\Build\wumpus_Data\Managed\Assembly-CSharp-firstpass.dll (this message is harmless)
+Loading E:\Lipe\PUC #\8º Período\ia\Wumpus\Build\wumpus_Data\Managed\Assembly-CSharp-firstpass.dll into Unity Child Domain
+Platform assembly: E:\Lipe\PUC #\8º Período\ia\Wumpus\Build\wumpus_Data\Managed\Assembly-CSharp.dll (this message is harmless)
+Loading E:\Lipe\PUC #\8º Período\ia\Wumpus\Build\wumpus_Data\Managed\Assembly-CSharp.dll into Unity Child Domain
+Platform assembly: E:\Lipe\PUC #\8º Período\ia\Wumpus\Build\wumpus_Data\Managed\UnityEngine.UI.dll (this message is harmless)
+Loading E:\Lipe\PUC #\8º Período\ia\Wumpus\Build\wumpus_Data\Managed\UnityEngine.UI.dll into Unity Child Domain
+Platform assembly: E:\Lipe\PUC #\8º Período\ia\Wumpus\Build\wumpus_Data\Managed\UnityEngine.Networking.dll (this message is harmless)
+Loading E:\Lipe\PUC #\8º Período\ia\Wumpus\Build\wumpus_Data\Managed\UnityEngine.Networking.dll into Unity Child Domain
+Platform assembly: E:\Lipe\PUC #\8º Período\ia\Wumpus\Build\wumpus_Data\Managed\UnityEngine.Analytics.dll (this message is harmless)
+Loading E:\Lipe\PUC #\8º Período\ia\Wumpus\Build\wumpus_Data\Managed\UnityEngine.Analytics.dll into Unity Child Domain
+Platform assembly: E:\Lipe\PUC #\8º Período\ia\Wumpus\Build\wumpus_Data\Managed\SwiPlCs.dll (this message is harmless)
+Loading E:\Lipe\PUC #\8º Período\ia\Wumpus\Build\wumpus_Data\Managed\SwiPlCs.dll into Unity Child Domain
+- Completed reload, in  0.251 seconds
+Platform assembly: E:\Lipe\PUC #\8º Período\ia\Wumpus\Build\wumpus_Data\Managed\System.Core.dll (this message is harmless)
+Platform assembly: E:\Lipe\PUC #\8º Período\ia\Wumpus\Build\wumpus_Data\Managed\System.dll (this message is harmless)
+desktop: 1920x1080 59Hz; virtual: 1920x1080 at 0,0
+<RI> Initializing input.
+<RI> Input initialized.
+<RI> Initialized touch support.
+UnloadTime: 2.032493 ms
+entrou
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+martin is_father_of inka
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+uwe is_father_of gloria
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+uwe is_father_of melanie
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+uwe is_father_of ayala
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+all children from uwe:
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+gloria
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+melanie
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+ayala
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+finshed!
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Setting up 4 worker threads for Enlighten.
+  Thread -> id: 2718 -> priority: 1 
+  Thread -> id: 2de4 -> priority: 1 
+  Thread -> id: ecc -> priority: 1 
+  Thread -> id: 2308 -> priority: 1 
+Smell
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Breeze
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Breeze
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Smell
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Smell
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Breeze
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Breeze
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Unloading 4 Unused Serialized files (Serialized files now loaded: 0)
+UnloadTime: 10.379998 ms
+entrou
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+martin is_father_of inka
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+uwe is_father_of gloria
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+uwe is_father_of melanie
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+uwe is_father_of ayala
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+all children from uwe:
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+gloria
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+melanie
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+ayala
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+finshed!
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+
+Unloading 2 unused Assets to reduce memory usage. Loaded Objects now: 390.
+Total: 0.463861 ms (FindLiveObjects: 0.050463 ms CreateObjectMapping: 0.037348 ms MarkObjects: 0.367496 ms  DeleteObjects: 0.007412 ms)
+
