@@ -3,8 +3,8 @@
             [agent_location/1],
             [agent_health/1],
             [agent_points/1],
-            [pit/1],
-            [caiu/2],
+            [pit_location/1],
+            [gold/1],
             [assume/1] ).
 start :-
     init_agent,
@@ -23,12 +23,15 @@ init_agent :-
     assert(agent_points([100])).
 
 init_world :-
-    retractall(pit(_)),
+    retractall(pit_location(_)),
     retractall(gold(_)),
-    assert(pit([1,0])),
-    assert(gold([0,1])),
+    assert(pit_location([1,0])),
+    assert(pit([0,1])),
+    assert(gold([0,3])).
 
 
+is_pit(yes, [X,Y]) :- pit_location([X,Y]).
+is_pit(no, [X,Y]).
     
 show :- 
     agent_location([X,Y]),
@@ -43,6 +46,24 @@ update_agent_location([X1,Y1]) :-
     retractall( agent_location(_) ),
     assert( agent_location([X1,Y1]) ),
     format("Estou na coluna ~p e na linha ~p", [X1, Y1]).
+
+update_health([H]) :-
+    agent_health([V]),
+    NH is V+H,
+    retractall(agent_health(_)),
+    assert( agent_health([NH])),
+    format("Nosso aventureiro esta com ~p pontos de vida!\n", [NH]).
+
+teste :-
+    agent_location([X,Y]),
+    format("Estou na coluna ~p e na linha ~p", [X, Y]),
+    ((is_pit(yes, [X,Y]))->format("caiu no buraco!\n"),
+    update_health([-100]);
+    format("que")).
+
+
+%movimentaçao
+
 
 lugar_prox([X,Y], 0, [X2, Y]) :- X2 is X+1.
 lugar_prox([X,Y], 1, [X, Y2]) :- Y2 is Y+1.
