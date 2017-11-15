@@ -45,18 +45,17 @@ update_agent_location([X1,Y1]) :-
     agent_location([X,Y]),
     retractall( agent_location(_) ),
     assert( agent_location([X1,Y1]) ),
-    format("Estou na coluna ~p e na linha ~p", [X1, Y1]).
+    format("\nEstou na coluna ~p e na linha ~p\n", [X1, Y1]).
 
 update_health([H]) :-
     agent_health([V]),
     NH is V+H,
     retractall(agent_health(_)),
     assert( agent_health([NH])),
-    format("Nosso aventureiro esta com ~p pontos de vida!\n", [NH]).
+    format("\nNosso aventureiro esta com ~p pontos de vida!\n", [NH]).
 
 teste :-
     agent_location([X,Y]),
-    format("Estou na coluna ~p e na linha ~p", [X, Y]),
     ((is_pit(yes, [X,Y]))->format("caiu no buraco!\n"),
     update_health([-100]);
     format("que")).
@@ -73,22 +72,26 @@ lugar_prox([X,Y], 3, [X, Y2]) :- Y2 is Y+1.
 move_up :-
     agent_location([X,Y]),
     Y1 is Y+1,
-    update_agent_location([X,Y1]).
+    update_agent_location([X,Y1]),
+    teste.
 
 move_down :-
     agent_location([X,Y]),
     Y1 is Y-1,
-    update_agent_location([X,Y1]).
+    update_agent_location([X,Y1]),
+    teste.
 
 move_left :-
     agent_location([X,Y]),
     X1 is X-1,
-    update_agent_location([X1,Y]).
+    update_agent_location([X1,Y]),
+    teste.
 
 move_right :-
     agent_location([X,Y]),
     X1 is X+1,
-    update_agent_location([X1,Y]).
+    update_agent_location([X1,Y]),
+    teste.
 
 %Adjacente(X1,X2) :- lugar_prox(X1,0,X2).
 
