@@ -5,6 +5,7 @@
             [agent_points/1],
             [pit_location/1],
             [gold/1],
+            [wumpus_location/1],
             [assume/1],
             [ammo/1] ).
 start :-
@@ -50,6 +51,10 @@ update_agent_location([X1,Y1]) :-
     assert( agent_location([X1,Y1]) ),
     ((is_vento([X1,Y1]))->format("Que ventania!\n");
     format("\n nao sinto vento nenhum")),
+    ((is_fedor([X1,Y1]))->format("AH! O terrivel Wumpus!\n");
+    format("\n nenhum sinal da besta por aqui...")),
+    ((is_brilho([X1,Y1]))->format("Nem tudo que reluz é ouro... mas essa luz com certeza deve ser!\n");
+    format("\n O ouro nao parece estar aqui perto.")),
     format("\nEstou na coluna ~p e na linha ~p\n", [X1, Y1]).
 
 update_health([H]) :-
@@ -104,6 +109,15 @@ move_right :-
 is_vento([X,Y]) :-
     pit_location([X1,Y1]),
     adjacente([X,Y],[X1,Y1]).
+
+is_fedor([X,Y]) :-
+    wumpus_location([X1,Y1]),
+    adjacente([X,Y],[X1,Y1]).
+
+is_brilho([X,Y]) :-
+    gold([X1,Y1]),
+    adjacente([X,Y],[X1,Y1]).
+
 
 %Agent Perceptions
 
