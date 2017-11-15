@@ -63,7 +63,7 @@ update_agent_location([X1,Y1]) :-
 update_agent_rotation([X1]) :-
     agent_rotation([X]),
     retractall( agent_rotation(_) ),
-    assert( agent_rocation([X1]) ),
+    assert( agent_rotation([X1]) ),
     format("\nEstou olhando para ~p\n", [X1]).
 
 update_health([H]) :-
