@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
@@ -31,7 +30,7 @@ public class GM : MonoBehaviour
             Environment.SetEnvironmentVariable("Path", Environment.GetEnvironmentVariable("Path") + @";C:\Program Files (x86)\swipl;C:\Program Files (x86)\swipl\bin");
             if (!PlEngine.IsInitialized)
             {
-                Console.WriteLine("entrou");
+                Debug.Log("entrou");
                 String[] param = { "-q" };  // suppressing informational and banner messages
                 PlEngine.Initialize(param);
                 PlQuery.PlCall("assert(father(martin, inka))");
@@ -41,15 +40,15 @@ public class GM : MonoBehaviour
                 using (var q = new PlQuery("father(P, C), atomic_list_concat([P,' is_father_of ',C], L)"))
                 {
                     foreach (PlQueryVariables v in q.SolutionVariables)
-                        Console.WriteLine(v["L"].ToString());
+                        Debug.Log(v["L"].ToString());
 
-                    Console.WriteLine("all children from uwe:");
+                    Debug.Log("all children from uwe:");
                     q.Variables["P"].Unify("uwe");
                     foreach (PlQueryVariables v in q.SolutionVariables)
-                        Console.WriteLine(v["C"].ToString());
+                        Debug.Log(v["C"].ToString());
                 }
                 PlEngine.PlCleanup();
-                Console.WriteLine("finshed!");
+                Debug.Log("finshed!");
             }
         }
     }
