@@ -26,30 +26,38 @@ public class GM : MonoBehaviour
         else
         {
             _instance = this;
-
-            Environment.SetEnvironmentVariable("SWI_HOME_DIR", @"C:\Program Files (x86)\swipl");
-            Environment.SetEnvironmentVariable("Path", Environment.GetEnvironmentVariable("Path") + @";C:\Program Files (x86)\swipl;C:\Program Files (x86)\swipl\bin");
-            if (!PlEngine.IsInitialized)
-            {
-                TextAsset textAsset = Resources.Load("wumpus") as TextAsset;
-                Debug.Log(textAsset);
-                Debug.Log("Path:");
-                Debug.Log(Application.dataPath + "/Resources/wumpus.pl");
-                String[] param = { "-q", "-f", Application.dataPath + "/Resources/wumpus.pl" };
-                PlEngine.Initialize(param);
-                PlQuery.PlCall("assert(start:-format('zvsf'))");
-                PlQuery c = new PlQuery("start");
-                c.NextSolution();
-                //getNextAction();
-            }
         }
     }
 
     // Use this for initialization
     void Start ()
     {
-        _gameRunning = true;	
-	}
+        _gameRunning = true;
+
+        Environment.SetEnvironmentVariable("SWI_HOME_DIR", @"C:\Program Files (x86)\swipl");
+        Environment.SetEnvironmentVariable("Path", Environment.GetEnvironmentVariable("Path") + @";C:\Program Files (x86)\swipl;C:\Program Files (x86)\swipl\bin");
+        if (!PlEngine.IsInitialized)
+        {
+            TextAsset textAsset = Resources.Load("wumpus") as TextAsset;
+            Debug.Log(textAsset);
+            Debug.Log("Path:");
+            Debug.Log(Application.dataPath + "/Resources/wumpus.pl");
+            String[] param = { "-q", "-f", Application.dataPath + "/Resources/wumpus.pl" };
+            PlEngine.Initialize(param);
+            PlQuery.PlCall("assert(start)");
+            PlQuery c = new PlQuery("start");
+            try
+            {
+                c.NextSolution();
+            }
+            catch (SbsSW.SwiPlCs.Exceptions.PlException e)
+            {
+                Debug.Log(e);
+            }
+            c.Dispose();
+            //getNextAction();
+        }
+    }
 
     private void Update()
     {
