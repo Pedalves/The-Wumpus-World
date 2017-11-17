@@ -6,12 +6,13 @@
             [agent_rotation/1],
             [pit_location/1],
             [gold/1],
-            [wumpus_location/1],
+            [wumpus20_location/1],
+            [wumpus50_location/1],
             [assume/1],
             [ammo/1] ).
 start :-
     init_agent,
-    init_world.
+    init_world_teste.
 
 derrota :-
     format("\n O aventureiro encontrou um fim inesperado.").
@@ -29,36 +30,49 @@ init_agent :-
     assert(agent_rotation([1])),
     assert(ammo([5])).
 
-init_world :-
+init_world_teste :-
     retractall(pit_location(_)),
     retractall(gold(_)),
-    assert(pit_location([1,0])),
+    retractall(wumpus20_location(_)),
+    retractall(wumpus50_location(_)),
+    assert(pit_location([0,2])),
     assert(pit_location([0,1])),
-    assert(gold([0,3])).
+    assert(pit_location([5,1])),
+    assert(pit_location([9,9])),
+    assert(pit_location([3,3])),
+    assert(pit_location([2,1])),
+    assert(pit_location([2,8])),
+    assert(pit_location([0,7])),
+    assert(gold([5,5])),
+    assert(gold([1,1])),
+    assert(gold([8,1])),
+    assert(wumpus20_location([3,1])),
+    assert(wumpus50_location([4,3])).
 
 
-is_pit(yes, [X,Y]) :- pit_location([X,Y]).
-is_pit(no, [X,Y]).
+is_pit([X,Y]) :- pit_location([X,Y]).
+is_gold([X,Y]) :- gold([X,Y]).
+is_wumpus20([X,Y]):- wumpus20_location([X,Y]).
+is_wumpus50([X,Y]):- wumpus20_location([X,Y]).
+
 
 show :-
     agent_location([X,Y]),
     agent_health([H]),
     agent_points([P]),
-    format("\nSaude: ~p \n", [H]),
-    format("Posicao: coluna ~p e linha ~p", [X,Y]),
-    format("\nPontuacao: ~p", [P]).
+    format("\nSaude: ~p , Pontuacao: ~p\n", [H,P]),
+    format("Posicao: coluna ~p e linha ~p\n", [X,Y]).
 
 update_agent_location([X1,Y1]) :-
     agent_location([X,Y]),
     retractall( agent_location(_) ),
     assert( agent_location([X1,Y1]) ),
-    ((is_vento([X1,Y1]))->format("Que ventania!\n");
+    ((is_vento([X1,Y1]))->format("\nQue ventania!");
     format("\n nao sinto vento nenhum")),
-    ((is_fedor([X1,Y1]))->format("AH! O terrivel Wumpus!\n");
+    ((is_fedor([X1,Y1]))->format("AH! Wumpus, o terrível, está próximo!");
     format("\n nenhum sinal da besta por aqui...")),
-    ((is_brilho([X1,Y1]))->format("Nem tudo que reluz é ouro... mas essa luz com certeza deve ser!\n");
-    format("\n O ouro nao parece estar aqui perto.")),
-    format("\nEstou na coluna ~p e na linha ~p\n", [X1, Y1]).
+    ((is_brilho([X1,Y1]))->format("\nNem tudo que reluz é ouro... mas essa luz com certeza deve ser!\n");
+    format("\n O ouro nao parece estar aqui perto.")).
 
 update_agent_rotation([X1]) :-
     agent_rotation([X]),
@@ -71,13 +85,26 @@ update_health([H]) :-
     NH is V+H,
     retractall(agent_health(_)),
     assert( agent_health([NH])),
-    format("\nNosso aventureiro esta com ~p pontos de vida!\n", [NH]).
+    format("\nNosso aventureiro perdeu ~p pontos de vida!\n", [H]).
+
+update_pontuacao([P]) :-
+    agent_points([S]),
+    NP is P+S,
+    retractall(agent_points(_)),
+    assert(agent_points([NP])).
 
 teste :-
     agent_location([X,Y]),
-    ((is_pit(yes, [X,Y]))->format("caiu no buraco!\n"),
+    ((is_pit([X,Y]))->format("\ncaiu no buraco!\n"),
     update_health([-100]);
-    format("que")).
+    (is_wumpus20([X,Y])->format("\natacado pelo Wumpus!\n"),
+    update_health([-20]);
+    (is_wumpus50([X,Y])->format("\natacado pelo Wumpus!\n"),
+    update_health([-50]);
+    is_gold([X,Y])->format("\nUm dos tesouros do Wumpus! Estou rico!\n"),
+    pegar;
+    format("\n\nnada aqui\n\n")))),
+    show.
 
 
 %movimentaçao
@@ -88,7 +115,7 @@ lugar_prox([X,Y], 2, [X2, Y]) :- X2 is X-1.
 lugar_prox([X,Y], 3, [X, Y2]) :- Y2 is Y-1.
 
 adjacente([X,Y], [X1,Y1]) :-
-lugar_prox([X,Y],_,[X1,Y1]).
+    lugar_prox([X,Y],_,[X1,Y1]).
 
 move_up :-
     agent_location([X,Y]),
@@ -137,14 +164,21 @@ turn_right :-
     ((X1 == -1)->(X1 is 3);true),
     update_agent_rotation([X1]).
 
+pegar :-
+    agent_location([X,Y]),
+    update_pontuacao([999]),
+    retract(gold([X,Y])).
+    
 
 is_vento([X,Y]) :-
     pit_location([X1,Y1]),
     adjacente([X,Y],[X1,Y1]).
 
 is_fedor([X,Y]) :-
-    wumpus_location([X1,Y1]),
-    adjacente([X,Y],[X1,Y1]).
+    wumpus20_location([X1,Y1]),
+    wumpus50_location([X2,Y2]),
+    (adjacente([X,Y],[X1,Y1]);
+    adjacente([X,Y],[X2,Y2])).
 
 is_brilho([X,Y]) :-
     gold([X1,Y1]),
@@ -174,3 +208,4 @@ brilho :-
     talvez_ouro([X,Y-1]).
 
 %Adjacente(X1,X2) :- lugar_prox(X1,0,X2).
+
