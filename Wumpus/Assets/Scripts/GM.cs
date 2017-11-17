@@ -44,7 +44,8 @@ public class GM : MonoBehaviour
             Debug.Log(Application.dataPath + "/Resources/wumpus.pl");
             String[] param = { "-q", "-f", Application.dataPath + "/Resources/wumpus.pl" };
             PlEngine.Initialize(param);
-            PlQuery.PlCall("assert(start)");
+
+            PrologQuery("assert(start)");
             PlQuery c = new PlQuery("start");
             try
             {
@@ -62,6 +63,12 @@ public class GM : MonoBehaviour
     private void Update()
     {
         PointsText.text = "Points: " + GetAgent().Points;
+    }
+
+    public void PrologQuery(string query)
+    {
+        PlQuery.PlCall(query);
+        ConsoleText.text += query;
     }
 
     static public GM GetInstance()
