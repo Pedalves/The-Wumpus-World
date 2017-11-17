@@ -15,7 +15,8 @@ start :-
     init_world_teste.
 
 derrota :-
-    format("\n O aventureiro encontrou um fim inesperado.").
+    format("\n O aventureiro encontrou um fim inesperado.\n\n Placar final\n"),
+    show.
 
 
 init_agent :-
@@ -87,7 +88,7 @@ update_health([H]) :-
     assert( agent_health([NH])),
     format("\nNosso aventureiro perdeu ~p pontos de vida!\n", [H]).
 
-update_pontuacao([P]) :-
+update_points([P]) :-
     agent_points([S]),
     NP is P+S,
     retractall(agent_points(_)),
@@ -95,16 +96,22 @@ update_pontuacao([P]) :-
 
 teste :-
     agent_location([X,Y]),
+    agent_health([H]),
     ((is_pit([X,Y]))->format("\ncaiu no buraco!\n"),
-    update_health([-100]);
+    update_health([-100]),
+    update_points([-1000]);
     (is_wumpus20([X,Y])->format("\natacado pelo Wumpus!\n"),
-    update_health([-20]);
+    update_health([-20]),
+    update_points([-20]);
     (is_wumpus50([X,Y])->format("\natacado pelo Wumpus!\n"),
-    update_health([-50]);
+    update_health([-50]),
+    update_points([-50]);
     is_gold([X,Y])->format("\nUm dos tesouros do Wumpus! Estou rico!\n"),
     pegar;
     format("\n\nnada aqui\n\n")))),
-    show.
+    show,
+    ((is_dead([H]))->derrota;
+    format(" ")).
 
 
 %movimentaçao
@@ -149,6 +156,7 @@ move :-
     (R == 2)->(X1 is X-1),Y1 is Y;
     (R == 3)->(X1 is X),Y1 is Y-1;
     true),
+    update_points([-1]),
     update_agent_location([X1,Y1]),
     teste.
 
@@ -156,19 +164,36 @@ turn_left :-
     agent_rotation([X]),
     X1 is X+1,
     ((X1 == 4)->(X1 is 0);true),
+    update_points([-1]),
     update_agent_rotation([X1]).
 
 turn_right :-
     agent_rotation([X]),
     X1 is X-1,
     ((X1 == -1)->(X1 is 3);true),
+    update_points([-1]),
     update_agent_rotation([X1]).
 
 pegar :-
     agent_location([X,Y]),
-    update_pontuacao([999]),
+    update_points([999]),
     retract(gold([X,Y])).
+
+
+disparar :-
+    agent_location([X,Y]),
+    agent_rotation([R]),
+    lugar_prox([X,Y], R, [X1,Y1]),
+    ammo([M]),
+    ((M==0)->format("\n Parece que as balas acabaram...\n");
+    M1 is M-1,
+    retractall(ammo(_)),
+    assert(ammo([M1]))).
     
+
+
+
+%Agent Perceptions    
 
 is_vento([X,Y]) :-
     pit_location([X1,Y1]),
@@ -183,9 +208,6 @@ is_fedor([X,Y]) :-
 is_brilho([X,Y]) :-
     gold([X1,Y1]),
     adjacente([X,Y],[X1,Y1]).
-
-
-%Agent Perceptions
 
 
 vento :-
@@ -206,6 +228,4 @@ brilho :-
     talvez_ouro([X-1,Y]),
     talvez_ouro([X,Y+1]),
     talvez_ouro([X,Y-1]).
-
-%Adjacente(X1,X2) :- lugar_prox(X1,0,X2).
 
