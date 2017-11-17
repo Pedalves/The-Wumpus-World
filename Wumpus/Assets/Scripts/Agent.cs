@@ -223,7 +223,27 @@ public class Agent : MonoBehaviour
 
     public void Perceive(string str)
     {
+        string query = "";
         Debug.Log(str);
+        switch(str)
+        {
+            case "Breeze":
+                query = "assert(vento)";
+                break;
+            case "Shiny":
+                query = "assert(brilho)";
+                break;
+            case "Smell":
+                query = "assert(fedor)";
+                break;
+            case "Scream":
+                query = "assert(grito)";
+                break;
+            default:
+                break;
+
+        }
+        GM.GetInstance().PrologQuery(query);
     }
 
     public void UpdatePoints(int points)
