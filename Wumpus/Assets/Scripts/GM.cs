@@ -68,7 +68,7 @@ public class GM : MonoBehaviour
     public void PrologQuery(string query)
     {
         PlQuery.PlCall(query);
-        ConsoleText.text += query;
+        ConsoleText.text += query + "\n";
     }
 
     static public GM GetInstance()
