@@ -8,6 +8,8 @@
             [gold/1],
             [wumpus20_location/1],
             [wumpus50_location/1],
+            [wumpus20_health/1],
+            [wumpus50_health/1],
             [assume/1],
             [ammo/1] ).
 start :-
@@ -36,6 +38,8 @@ init_world_teste :-
     retractall(gold(_)),
     retractall(wumpus20_location(_)),
     retractall(wumpus50_location(_)),
+    retractall(wumpus20_health(_)),
+    retractall(wumpus50_health(_)),
     assert(pit_location([0,2])),
     assert(pit_location([0,1])),
     assert(pit_location([5,1])),
@@ -48,13 +52,23 @@ init_world_teste :-
     assert(gold([1,1])),
     assert(gold([8,1])),
     assert(wumpus20_location([3,1])),
-    assert(wumpus50_location([4,3])).
+    assert(wumpus50_location([4,3])),
+    assert(wumpus20_health([100])),
+    assert(wumpus50_health([100])).
 
+
+%verificaçao dos acontecimentos ou mortes.
 
 is_pit([X,Y]) :- pit_location([X,Y]).
 is_gold([X,Y]) :- gold([X,Y]).
 is_wumpus20([X,Y]):- wumpus20_location([X,Y]).
 is_wumpus50([X,Y]):- wumpus20_location([X,Y]).
+is_wumpus20_dead([H]) :-
+    H < 1.
+is_wumpus50_dead([H]) :-
+    H < 1.
+is_hero_dead([H]) :-
+    H < 1.
 
 
 show :-
@@ -86,13 +100,35 @@ update_health([H]) :-
     NH is V+H,
     retractall(agent_health(_)),
     assert( agent_health([NH])),
-    format("\nNosso aventureiro perdeu ~p pontos de vida!\n", [H]).
+    format("\nNosso aventureiro perdeu ~p pontos de vida!\n", [H]),
+    ((is_hero_dead([NH]))->derrota;
+    format(" ")).
 
 update_points([P]) :-
     agent_points([S]),
     NP is P+S,
     retractall(agent_points(_)),
     assert(agent_points([NP])).
+
+update_wumpus20_health([D]) :-
+    wumpus20_location([X,Y]),
+    wumpus20_health([V]),
+    NV is V+D,
+    retractall(wumpus20_health(_)),
+    assert(wumpus20_health([NV])),
+    ((is_wumpus20_dead([NV]))->retract(wumpus50_location([X,Y])),
+    format("\n E com esse grito horrendo, a tão temida besta está morta!\n");
+    format("\n Consegui atingir a fera, mas o monsttro ainda respira e parece irritado!\n ")).
+
+update_wumpus50_health([D]) :-
+    wumpus50_location([X,Y]),
+    wumpus50_health([V]),
+    NV is V+D,
+    retractall(wumpus50_health(_)),
+    assert(wumpus50_health([NV])),
+    ((is_wumpus50_dead([NV]))->retract(wumpus50_location([X,Y])),
+    format("\n E com esse grito horrendo, a tão temida besta está morta!\n");
+    format("\n Consegui atingir a fera, mas o monsttro ainda respira e parece irritado!\n ")).
 
 teste :-
     agent_location([X,Y]),
@@ -109,10 +145,7 @@ teste :-
     is_gold([X,Y])->format("\nUm dos tesouros do Wumpus! Estou rico!\n"),
     pegar;
     format("\n\nnada aqui\n\n")))),
-    show,
-    ((is_dead([H]))->derrota;
-    format(" ")).
-
+    show.
 
 %movimentaçao
 
@@ -188,7 +221,10 @@ disparar :-
     ((M==0)->format("\n Parece que as balas acabaram...\n");
     M1 is M-1,
     retractall(ammo(_)),
-    assert(ammo([M1]))).
+    assert(ammo([M1])),
+    ((is_wumpus20([X1,Y1]))->update_wumpus20_health([-30]);
+    ((is_wumpus50([X1,Y1]))->update_wumpus50_healtn([-30]);
+    format("\n O disparo atingiu uma pedra, parece que o wumpus não estava aqui afinal de contas.\n")))).
     
 
 
