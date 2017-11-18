@@ -38,25 +38,22 @@ public class GM : MonoBehaviour
         Environment.SetEnvironmentVariable("Path", Environment.GetEnvironmentVariable("Path") + @";C:\Program Files (x86)\swipl;C:\Program Files (x86)\swipl\bin");
         if (!PlEngine.IsInitialized)
         {
-            TextAsset textAsset = Resources.Load("wumpus") as TextAsset;
-            Debug.Log(textAsset);
-            Debug.Log("Path:");
-            Debug.Log(Application.dataPath + "/Resources/wumpus.pl");
             String[] param = { "-q", "-f", Application.dataPath + "/Resources/wumpus.pl" };
             PlEngine.Initialize(param);
 
-            PrologQuery("assert(start)");
+            //PrologQuery("assert(start)");
             PlQuery c = new PlQuery("start");
             try
             {
                 c.NextSolution();
+                Debug.Log("OK");
             }
             catch (SbsSW.SwiPlCs.Exceptions.PlException e)
             {
-                Debug.Log(e);
+                Debug.Log(e.ToString());
             }
             c.Dispose();
-            //getNextAction();
+            GetNextAction();
         }
     }
 
@@ -114,13 +111,16 @@ public class GM : MonoBehaviour
         PointsText.text = "Points: " + points;
     }
 
-    public string getNextAction()
+    public string GetNextAction()
     {
-        PlQuery actionQuery = new PlQuery("move_up");
-        actionQuery.NextSolution();
-        foreach (PlQueryVariables v in actionQuery.SolutionVariables)
-            Console.WriteLine(v["X"].ToString());
+        PlQuery actionQuery = new PlQuery("agent_location([X,Y])");
+        //actionQuery.NextSolution();
+        Debug.Log("Ini:");
+        foreach (PlQueryVariables s in actionQuery.SolutionVariables)
+            Debug.Log(s["X"].ToString());
+        Debug.Log("Fim.");
+        actionQuery.Dispose();
 
-        return "";
+        return "Up";
     }
 }

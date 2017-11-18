@@ -63,6 +63,15 @@ public class Agent : MonoBehaviour
                 Shoot();
             }
         }
+
+        //switch (GM.GetInstance().GetNextAction())
+        //{
+        //    case "Up":
+        //        Move();
+        //        break;
+        //    default:
+        //        break;
+        //}
     }
 
     IEnumerator CheckNextMove()

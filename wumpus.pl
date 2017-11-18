@@ -1,6 +1,7 @@
 %declaracao_das_variaveis_dinamicas.
 :- dynamic(
             [agent_location/1],
+			[agent_last_location/1],
             [agent_health/1],
             [agent_points/1],
             [agent_rotation/1],
@@ -20,14 +21,15 @@ derrota :-
     format("\n O aventureiro encontrou um fim inesperado.\n\n Placar final\n"),
     show.
 
-
 init_agent :-
     retractall(agent_location(_)),
+	retractall(agent_last_location(_)),
     retractall(agent_health(_)),
     retractall(agent_points(_)),
     retractall(agent_rotation(_)),
     retractall(ammo(_)),
     assert(agent_location([0,0])),
+	assert(agent_last_location([0,0])),
     assert(agent_health([100])),
     assert(agent_points([100])),
     assert(agent_rotation([1])),
@@ -41,7 +43,7 @@ init_world_teste :-
     retractall(wumpus20_health(_)),
     retractall(wumpus50_health(_)),
     assert(pit_location([0,2])),
-    assert(pit_location([0,1])),
+    assert(pit_location([7,1])),
     assert(pit_location([5,1])),
     assert(pit_location([9,9])),
     assert(pit_location([3,3])),
@@ -82,6 +84,9 @@ update_agent_location([X1,Y1]) :-
     agent_location([X,Y]),
     retractall( agent_location(_) ),
     assert( agent_location([X1,Y1]) ),
+	agent_last_location([Xo,Yo]),
+    retractall( agent_last_location(_) ),
+    assert( agent_last_location([X,Y]) ),
     ((is_vento([X1,Y1]))->format("\nQue ventania!");
     format("\n nao sinto vento nenhum")),
     ((is_fedor([X1,Y1]))->format("AH! Wumpus, o terrível, está próximo!");
@@ -184,14 +189,54 @@ move_right :-
 move :-
     agent_location([X,Y]),
     agent_rotation([R]),
-    ((R == 0)->(X1 is X+1),Y1 is Y;
-    (R == 1)->(X1 is X),Y1 is Y+1;
-    (R == 2)->(X1 is X-1),Y1 is Y;
-    (R == 3)->(X1 is X),Y1 is Y-1;
-    true),
+    (
+		(R == 0)->(
+			(X+1 < 12)->(
+				(X1 is X+1),Y1 is Y
+			);
+			false
+		);
+    
+		(R == 1)->(
+			(Y+1 < 12)->(
+				(X1 is X),Y1 is Y+1
+			);
+			false
+		);
+		
+		(R == 2)->(
+			(X-1 > -1)->(
+				(X1 is X-1),Y1 is Y
+			);
+			false
+		);
+		
+		(R == 3)->(
+			(Y-1 > -1)->(
+				(X1 is X),Y1 is Y-1
+			);
+			false
+		);
+    
+		true
+	),
     update_points([-1]),
     update_agent_location([X1,Y1]),
     teste.
+	
+move_back :-
+	agent_rotation([R1]),
+	(	
+		(R1 == 3; R1 == 2) -> (
+			turn_right,
+			turn_right
+		); 
+		(R1 == 1; R1 == 0 )-> (
+			turn_left,
+			turn_left
+		)
+	),
+    move.
 
 turn_left :-
     agent_rotation([X]),
@@ -203,7 +248,7 @@ turn_left :-
 turn_right :-
     agent_rotation([X]),
     X1 is X-1,
-    ((X1 == -1)->(X1 is 3);true),
+    ((X1 == -1)->X1 is 3;true),
     update_points([-1]),
     update_agent_rotation([X1]).
 
