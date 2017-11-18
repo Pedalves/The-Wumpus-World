@@ -18,7 +18,7 @@ start :-
     init_world_teste.
 
 derrota :-
-    format("\n O aventureiro encontrou um fim inesperado.\n\n Placar final\n"),
+    format("\nO aventureiro encontrou um fim inesperado.\n\n Placar final\n"),
     show.
 
 init_agent :-
@@ -78,7 +78,7 @@ show :-
     agent_health([H]),
     agent_points([P]),
     format("\nSaude: ~p , Pontuacao: ~p\n", [H,P]),
-    format("Posicao: coluna ~p e linha ~p\n", [X,Y]).
+    format("\nPosicao: coluna ~p e linha ~p\n", [X,Y]).
 
 update_agent_location([X1,Y1]) :-
     agent_location([X,Y]),
@@ -88,11 +88,11 @@ update_agent_location([X1,Y1]) :-
     retractall( agent_last_location(_) ),
     assert( agent_last_location([X,Y]) ),
     ((is_vento([X1,Y1]))->format("\nQue ventania!");
-    format("\n nao sinto vento nenhum")),
-    ((is_fedor([X1,Y1]))->format("AH! Wumpus, o terrível, está próximo!");
-    format("\n nenhum sinal da besta por aqui...")),
-    ((is_brilho([X1,Y1]))->format("\nNem tudo que reluz é ouro... mas essa luz com certeza deve ser!\n");
-    format("\n O ouro nao parece estar aqui perto.")).
+    format("\nNao sinto vento nenhum")),
+    ((is_fedor([X1,Y1]))->format("AH! Wumpus, o terrivel, esta proximo!");
+    format("\nNenhum sinal da besta por aqui...")),
+    ((is_brilho([X1,Y1]))->format("\nNem tudo que reluz e ouro... mas essa luz com certeza deve ser!\n");
+    format("\nO ouro nao parece estar aqui perto.")).
 
 update_agent_rotation([X1]) :-
     agent_rotation([X]),
@@ -122,8 +122,8 @@ update_wumpus20_health([D]) :-
     retractall(wumpus20_health(_)),
     assert(wumpus20_health([NV])),
     ((is_wumpus20_dead([NV]))->retract(wumpus20_location([X,Y])),
-    format("\n E com esse grito horrendo, a tão temida besta está morta!\n");
-    format("\n Consegui atingir a fera, mas o monsttro ainda respira e parece irritado!\n ")).
+    format("\nE com esse grito horrendo, a tao temida besta esta morta!\n");
+    format("\nConsegui atingir a fera, mas o monstro ainda respira e parece irritado!\n ")).
 
 update_wumpus50_health([D]) :-
     wumpus50_location([X,Y]),
@@ -132,24 +132,24 @@ update_wumpus50_health([D]) :-
     retractall(wumpus50_health(_)),
     assert(wumpus50_health([NV])),
     ((is_wumpus50_dead([NV]))->retract(wumpus50_location([X,Y])),
-    format("\n E com esse grito horrendo, a tão temida besta está morta!\n");
-    format("\n Consegui atingir a fera, mas o monsttro ainda respira e parece irritado!\n ")).
+    format("\nE com esse grito horrendo, a tao temida besta esta morta!\n");
+    format("\nConsegui atingir a fera, mas o monstro ainda respira e parece irritado!\n ")).
 
 teste :-
     agent_location([X,Y]),
     agent_health([H]),
-    ((is_pit([X,Y]))->format("\ncaiu no buraco!\n"),
+    ((is_pit([X,Y]))->format("\nCaiu no buraco!\n"),
     update_health([-100]),
     update_points([-1000]);
-    (is_wumpus20([X,Y])->format("\natacado pelo Wumpus!\n"),
+    (is_wumpus20([X,Y])->format("\nAtacado pelo Wumpus!\n"),
     update_health([-20]),
     update_points([-20]);
-    (is_wumpus50([X,Y])->format("\natacado pelo Wumpus!\n"),
+    (is_wumpus50([X,Y])->format("\nAtacado pelo Wumpus!\n"),
     update_health([-50]),
     update_points([-50]);
     is_gold([X,Y])->format("\nUm dos tesouros do Wumpus! Estou rico!\n"),
     pegar;
-    format("\n\nnada aqui\n\n")))),
+    format("\n\nNada aqui\n\n")))),
     show.
 
 %movimentaçao
@@ -263,13 +263,13 @@ disparar :-
     agent_rotation([R]),
     lugar_prox([X,Y], R, [X1,Y1]),
     ammo([M]),
-    ((M==0)->format("\n Parece que as balas acabaram...\n");
+    ((M==0)->format("\nParece que as balas acabaram...\n");
     M1 is M-1,
     retractall(ammo(_)),
     assert(ammo([M1])),
     ((is_wumpus20([X1,Y1]))->update_wumpus20_health([-30]);
     ((is_wumpus50([X1,Y1]))->update_wumpus50_healtn([-30]);
-    format("\n O disparo atingiu uma pedra, parece que o wumpus não estava aqui afinal de contas.\n")))).
+    format("\nO disparo atingiu uma pedra, parece que o wumpus nao estava aqui afinal de contas.\n")))).
     
 
 
