@@ -116,7 +116,7 @@ update_wumpus20_health([D]) :-
     NV is V+D,
     retractall(wumpus20_health(_)),
     assert(wumpus20_health([NV])),
-    ((is_wumpus20_dead([NV]))->retract(wumpus50_location([X,Y])),
+    ((is_wumpus20_dead([NV]))->retract(wumpus20_location([X,Y])),
     format("\n E com esse grito horrendo, a tão temida besta está morta!\n");
     format("\n Consegui atingir a fera, mas o monsttro ainda respira e parece irritado!\n ")).
 
