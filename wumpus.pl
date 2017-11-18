@@ -241,16 +241,16 @@ move_back :-
 turn_left :-
     agent_rotation([X]),
     X1 is X+1,
-    ((X1 == 4)->(X1 is 0);true),
+    ((X1 == 4)->X2 is 0;X2 is X1),
     update_points([-1]),
-    update_agent_rotation([X1]).
+    update_agent_rotation([X2]).
 
 turn_right :-
     agent_rotation([X]),
     X1 is X-1,
-    ((X1 == -1)->X1 is 3;true),
+    ((X1 == -1)->X2 is 3;X2 is X1),
     update_points([-1]),
-    update_agent_rotation([X1]).
+    update_agent_rotation([X2]).
 
 pegar :-
     agent_location([X,Y]),
