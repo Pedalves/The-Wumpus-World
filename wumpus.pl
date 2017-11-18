@@ -31,7 +31,7 @@ init_agent :-
     assert(agent_location([0,0])),
 	assert(agent_last_location([0,0])),
     assert(agent_health([100])),
-    assert(agent_points([100])),
+    assert(agent_points([0])),
     assert(agent_rotation([1])),
     assert(ammo([5])).
 
