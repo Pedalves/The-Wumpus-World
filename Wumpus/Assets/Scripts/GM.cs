@@ -38,22 +38,19 @@ public class GM : MonoBehaviour
         Environment.SetEnvironmentVariable("Path", Environment.GetEnvironmentVariable("Path") + @";C:\Program Files (x86)\swipl;C:\Program Files (x86)\swipl\bin");
         if (!PlEngine.IsInitialized)
         {
-            String[] param = { "-q", "-f", Application.dataPath + "/Resources/wumpus.pl" };
+            String[] param = { "-q"/*, "-f", Application.dataPath + "/Resources/wumpus.pl"*/ };
             PlEngine.Initialize(param);
 
-            //PrologQuery("assert(start)");
-            PlQuery c = new PlQuery("start");
             try
             {
-                c.NextSolution();
-                Debug.Log("OK");
+                PlQuery.PlCall("consult('c:/Users/pedro/PrologProjects/The-Wumpus-World/wumpus.pl')");
+                PlQuery.PlCall("start");
+                Debug.Log("start");
             }
-            catch (SbsSW.SwiPlCs.Exceptions.PlException e)
+            catch (SbsSW.SwiPlCs.Exceptions.PlException ex)
             {
-                Debug.Log(e.ToString());
+                Debug.Log("Exception handled: " + ex.Message);
             }
-            c.Dispose();
-            GetCurrentAction();
         }
     }
 
@@ -117,8 +114,8 @@ public class GM : MonoBehaviour
         //PlQuery actionQuery = new PlQuery("agent_location([X,Y])");
         //actionQuery.NextSolution();
 
+        Debug.Log("agent");
         PlQuery actionQuery = new PlQuery("agent_next_action(Action)");
-        //Debug.Log("Ini:");
 
         foreach (PlQueryVariables s in actionQuery.SolutionVariables)
         {
@@ -134,13 +131,16 @@ public class GM : MonoBehaviour
 
     public void ReadyNextAction()
     {
+        Debug.Log("ready");
         PlQuery actionQuery = new PlQuery("ready_next_action");
+        actionQuery.NextSolution();
         actionQuery.Dispose();
     }
 
     public void ExecuteCurrentAction()
     {
         PlQuery actionQuery = new PlQuery("execute_current_action");
+        actionQuery.NextSolution();
         actionQuery.Dispose();
     }
 }

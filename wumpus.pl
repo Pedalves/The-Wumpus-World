@@ -4,6 +4,7 @@
 			[agent_last_location/1],
 			[agent_next_action/1],
             [agent_health/1],
+			[agent_map/1],
             [agent_points/1],
             [agent_rotation/1],
             [pit_location/1],
@@ -30,12 +31,14 @@ init_agent :-
     retractall(agent_points(_)),
     retractall(agent_rotation(_)),
     retractall(ammo(_)),
+	retractall(agent_map(_)),
     assert(agent_location([0,0])),
 	assert(agent_last_location([0,0])),
 	assert(agent_next_action("none")),
     assert(agent_health([100])),
     assert(agent_points([0])),
     assert(agent_rotation([1])),
+	assert(agent_map([0,0]):-true),
     assert(ammo([5])).
 
 init_world_teste :-
@@ -90,6 +93,8 @@ update_agent_location([X1,Y1]) :-
 	agent_last_location([Xo,Yo]),
     retractall( agent_last_location(_) ),
     assert( agent_last_location([X,Y]) ),
+	assert(agent_map([X1,Y1]):-true),
+		
     ((is_vento([X1,Y1]))->format("\nQue ventania!");
     format("\nNao sinto vento nenhum")),
     ((is_fedor([X1,Y1]))->format("AH! Wumpus, o terrivel, esta proximo!");
@@ -168,30 +173,6 @@ lugar_prox([X,Y], 3, [X, Y2]) :- Y2 is Y-1.
 adjacente([X,Y], [X1,Y1]) :-
     lugar_prox([X,Y],_,[X1,Y1]).
 
-move_up :-
-    agent_location([X,Y]),
-    Y1 is Y+1,
-    update_agent_location([X,Y1]),
-    teste.
-
-move_down :-
-    agent_location([X,Y]),
-    Y1 is Y-1,
-    update_agent_location([X,Y1]),
-    teste.
-
-move_left :-
-    agent_location([X,Y]),
-    X1 is X-1,
-    update_agent_location([X1,Y]),
-    teste.
-
-move_right :-
-    agent_location([X,Y]),
-    X1 is X+1,
-    update_agent_location([X1,Y]),
-    teste.
-
 move :-
     agent_location([X,Y]),
     agent_rotation([R]),
@@ -228,7 +209,6 @@ move :-
 	),
     update_points([-1]),
     update_agent_location([X1,Y1]),
-    update_action("Move"),
     teste.
 	
 move_back :-
@@ -322,7 +302,9 @@ brilho :-
 %Agent IA
 
 ready_next_action :-
-	assert(agent_next_action("Move")).
+	retractall(agent_next_action(_)),
+	assert(agent_next_action(move)).
+	
 
 execute_current_action :-
 	agent_next_action(Action),
@@ -345,5 +327,8 @@ execute_current_action :-
 		(Action == "Shoot") -> (
 			disparar
 		); 
-		true
+		(Action == "Back") -> (
+			move_back
+		); 
+		false
 	).
