@@ -274,9 +274,8 @@ is_fedor([X,Y]) :-
     adjacente([X,Y],[X2,Y2])).
 
 is_brilho([X,Y]) :-
-    gold([X1,Y1]),
-    adjacente([X,Y],[X1,Y1]).
-
+    gold([X,Y]).
+    
 
 vento :-
     agent_location([X,Y]),
