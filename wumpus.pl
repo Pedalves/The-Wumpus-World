@@ -290,11 +290,7 @@ fedor :-
     talvez_wumpus([X,Y+1]),
     talvez_wumpus([X,Y-1]).
 
-brilho :-
-    agent_location([X,Y]),
-    talvez_ouro([X-1,Y]),
-    talvez_ouro([X,Y+1]),
-    talvez_ouro([X,Y-1]).
+
 
 
 
