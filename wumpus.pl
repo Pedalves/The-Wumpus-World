@@ -2,6 +2,7 @@
 :- dynamic(
             [agent_location/1],
 			[agent_last_location/1],
+			[agent_next_action/1],
             [agent_health/1],
             [agent_points/1],
             [agent_rotation/1],
@@ -24,12 +25,14 @@ derrota :-
 init_agent :-
     retractall(agent_location(_)),
 	retractall(agent_last_location(_)),
+	retractall(agent_next_action(_)),
     retractall(agent_health(_)),
     retractall(agent_points(_)),
     retractall(agent_rotation(_)),
     retractall(ammo(_)),
     assert(agent_location([0,0])),
 	assert(agent_last_location([0,0])),
+	assert(agent_next_action("none")),
     assert(agent_health([100])),
     assert(agent_points([0])),
     assert(agent_rotation([1])),
@@ -135,6 +138,9 @@ update_wumpus50_health([D]) :-
     format("\nE com esse grito horrendo, a tao temida besta esta morta!\n");
     format("\nConsegui atingir a fera, mas o monstro ainda respira e parece irritado!\n ")).
 
+update_action(action) :-
+	assert(agent_next_action(action)).
+
 teste :-
     agent_location([X,Y]),
     agent_health([H]),
@@ -222,6 +228,7 @@ move :-
 	),
     update_points([-1]),
     update_agent_location([X1,Y1]),
+    update_action("Move"),
     teste.
 	
 move_back :-
@@ -310,3 +317,33 @@ brilho :-
     talvez_ouro([X,Y+1]),
     talvez_ouro([X,Y-1]).
 
+
+
+%Agent IA
+
+ready_next_action :-
+	assert(agent_next_action("Move")).
+
+execute_current_action :-
+	agent_next_action(Action),
+	(	
+		(Action == "Move") -> (
+			move
+		); 
+		(Action == "TurnRight") -> (
+			turn_right
+		); 
+		(Action == "TurnLeft") -> (
+			turn_left
+		); 
+		(Action == "Climb") -> (
+			move
+		); 
+		(Action == "Grab") -> (
+			pegar
+		); 
+		(Action == "Shoot") -> (
+			disparar
+		); 
+		true
+	).

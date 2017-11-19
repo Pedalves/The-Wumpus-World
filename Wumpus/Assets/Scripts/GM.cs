@@ -53,7 +53,7 @@ public class GM : MonoBehaviour
                 Debug.Log(e.ToString());
             }
             c.Dispose();
-            GetNextAction();
+            GetCurrentAction();
         }
     }
 
@@ -111,16 +111,36 @@ public class GM : MonoBehaviour
         PointsText.text = "Points: " + points;
     }
 
-    public string GetNextAction()
+    public string GetCurrentAction()
     {
-        PlQuery actionQuery = new PlQuery("agent_location([X,Y])");
+        string action = "";
+        //PlQuery actionQuery = new PlQuery("agent_location([X,Y])");
         //actionQuery.NextSolution();
-        Debug.Log("Ini:");
+
+        PlQuery actionQuery = new PlQuery("agent_next_action(Action)");
+        //Debug.Log("Ini:");
+
         foreach (PlQueryVariables s in actionQuery.SolutionVariables)
-            Debug.Log(s["X"].ToString());
-        Debug.Log("Fim.");
+        {
+            action = s["Action"].ToString();
+            Debug.Log(action);
+        }
+
+        //Debug.Log("Fim.");
         actionQuery.Dispose();
 
-        return "Up";
+        return action;
+    }
+
+    public void ReadyNextAction()
+    {
+        PlQuery actionQuery = new PlQuery("ready_next_action");
+        actionQuery.Dispose();
+    }
+
+    public void ExecuteCurrentAction()
+    {
+        PlQuery actionQuery = new PlQuery("execute_current_action");
+        actionQuery.Dispose();
     }
 }

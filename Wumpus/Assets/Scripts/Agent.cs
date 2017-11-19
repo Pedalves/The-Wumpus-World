@@ -63,22 +63,48 @@ public class Agent : MonoBehaviour
                 Shoot();
             }
         }
-
-        //switch (GM.GetInstance().GetNextAction())
-        //{
-        //    case "Up":
-        //        Move();
-        //        break;
-        //    default:
-        //        break;
-        //}
     }
 
     IEnumerator CheckNextMove()
     {
         while (Health > 0)
         {
+            GM.GetInstance().ReadyNextAction();
             yield return new WaitForSeconds(1);
+            switch (GM.GetInstance().GetCurrentAction())
+            {
+                case "Move":
+                    Move();
+                    break;
+                case "TurnRight":
+                    TurnRight();
+                    break;
+                case "TurnLeft":
+                    TurnLeft();
+                    break;
+                case "Climb":
+                    Climb();
+                    break;
+                case "Grab":
+                    Grab();
+                    break;
+                case "Shoot":
+                    Shoot();
+                    break;
+                case "ReceiveDamage20":
+                    ReceiveDamage(20,true);
+                    break;
+                case "ReceiveDamage50":
+                    ReceiveDamage(20, true);
+                    break;
+                case "ReceiveDamageHole":
+                    ReceiveDamage(1000);
+                    break;
+                default:
+                    break;
+            }
+            
+            GM.GetInstance().ExecuteCurrentAction();
         }
     }
 
