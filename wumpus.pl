@@ -3,6 +3,7 @@
             [agent_location/1],
 			[agent_last_location/1],
 			[agent_next_action/1],
+			[agent_next_location/1],
             [agent_health/1],
 			[agent_map/1],
             [agent_points/1],
@@ -27,6 +28,7 @@ init_agent :-
     retractall(agent_location(_)),
 	retractall(agent_last_location(_)),
 	retractall(agent_next_action(_)),
+	retractall(agent_next_location(_)),
     retractall(agent_health(_)),
     retractall(agent_points(_)),
     retractall(agent_rotation(_)),
@@ -34,7 +36,8 @@ init_agent :-
 	retractall(agent_map(_)),
     assert(agent_location([0,0])),
 	assert(agent_last_location([0,0])),
-	assert(agent_next_action("none")),
+	assert(agent_next_action(none)),
+	assert(agent_next_location([0,0])),
     assert(agent_health([100])),
     assert(agent_points([0])),
     assert(agent_rotation([1])),
@@ -210,6 +213,43 @@ move :-
     update_points([-1]),
     update_agent_location([X1,Y1]),
     teste.
+
+next_move :-
+    agent_location([X,Y]),
+    agent_rotation([R]),
+    (
+		(R == 0)->(
+			(X+1 < 12)->(
+				(X1 is X+1),Y1 is Y
+			);
+			false
+		);
+    
+		(R == 1)->(
+			(Y+1 < 12)->(
+				(X1 is X),Y1 is Y+1
+			);
+			false
+		);
+		
+		(R == 2)->(
+			(X-1 > -1)->(
+				(X1 is X-1),Y1 is Y
+			);
+			false
+		);
+		
+		(R == 3)->(
+			(Y-1 > -1)->(
+				(X1 is X),Y1 is Y-1
+			);
+			false
+		);
+    
+		true
+	),
+    retractall(agent_next_location(_)),
+	assert(agent_next_location([X1,Y1])).
 	
 move_back :-
 	agent_rotation([R1]),
@@ -261,7 +301,7 @@ disparar :-
 
 
 
-%Agent Perceptions    
+%Agent Perceptions / unity feedback   
 
 is_vento([X,Y]) :-
     pit_location([X1,Y1]),
@@ -278,20 +318,33 @@ is_brilho([X,Y]) :-
     
 
 vento :-
-    agent_location([X,Y]),
+    agent_next_location([X,Y]),
     talvez_buraco([X-1,Y]),
     talvez_buraco([X,Y+1]),
     talvez_buraco([X,Y-1]).
 
 
 fedor :-
-    agent_location([X,Y]),
+    agent_next_location([X,Y]),
     talvez_wumpus([X-1,Y]),
     talvez_wumpus([X,Y+1]),
     talvez_wumpus([X,Y-1]).
 
+brilho :-
+	agent_next_location([X,Y]),
+	assert(gold([X,Y])).
 
+wumpus20 :-
+	agent_next_location([X,Y]),
+	atualiza_wumpus_20([X,Y]).
 
+wumpus50 :-
+	agent_next_location([X,Y]),
+	atualiza_wumpus_50([X,Y]).
+
+buraco :-
+	agent_next_location([X,Y]),
+	assert(pit_location([X,Y])).
 
 
 %Agent IA
@@ -304,25 +357,25 @@ ready_next_action :-
 execute_current_action :-
 	agent_next_action(Action),
 	(	
-		(Action == "Move") -> (
+		(Action == move) -> (
 			move
 		); 
-		(Action == "TurnRight") -> (
+		(Action == turnRight) -> (
 			turn_right
 		); 
-		(Action == "TurnLeft") -> (
+		(Action == turnLeft) -> (
 			turn_left
 		); 
-		(Action == "Climb") -> (
+		(Action == climb) -> (
 			move
 		); 
-		(Action == "Grab") -> (
+		(Action == grab) -> (
 			pegar
 		); 
-		(Action == "Shoot") -> (
+		(Action == shoot) -> (
 			disparar
 		); 
-		(Action == "Back") -> (
+		(Action == back) -> (
 			move_back
 		); 
 		false

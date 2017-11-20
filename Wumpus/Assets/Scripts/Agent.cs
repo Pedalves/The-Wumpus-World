@@ -91,15 +91,6 @@ public class Agent : MonoBehaviour
                 case "shoot":
                     Shoot();
                     break;
-                case "receiveDamage20":
-                    ReceiveDamage(20,true);
-                    break;
-                case "receiveDamage50":
-                    ReceiveDamage(20, true);
-                    break;
-                case "receiveDamageHole":
-                    ReceiveDamage(1000);
-                    break;
                 default:
                     break;
             }
@@ -243,6 +234,24 @@ public class Agent : MonoBehaviour
 
     public void ReceiveDamage(int damage, bool wumpus = false)
     {
+        string query = "";
+        switch (damage)
+        {
+            case 20:
+                query = "wumpus20";
+                break;
+            case 50:
+                query = "wumpus50";
+                break;
+            case 1000:
+                query = "fedor";
+                break;
+            default:
+                break;
+
+        }
+        GM.GetInstance().PrologQuery(query);
+
         Health -= damage;
         if(wumpus)
         {
@@ -263,16 +272,13 @@ public class Agent : MonoBehaviour
         switch(str)
         {
             case "Breeze":
-                query = "assert(vento)";
+                query = "vento";
                 break;
             case "Shiny":
-                query = "assert(brilho)";
+                query = "brilho";
                 break;
             case "Smell":
-                query = "assert(fedor)";
-                break;
-            case "Scream":
-                query = "assert(grito)";
+                query = "fedor";
                 break;
             default:
                 break;

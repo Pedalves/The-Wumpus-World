@@ -1,0 +1,1 @@
+chamar next_move sempre q a IA tomar uma decisao de move
