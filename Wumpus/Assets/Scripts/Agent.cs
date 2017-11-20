@@ -76,28 +76,28 @@ public class Agent : MonoBehaviour
                 case "move":
                     Move();
                     break;
-                case "TurnRight":
+                case "turnRight":
                     TurnRight();
                     break;
-                case "TurnLeft":
+                case "turnLeft":
                     TurnLeft();
                     break;
-                case "Climb":
+                case "climb":
                     Climb();
                     break;
-                case "Grab":
+                case "grab":
                     Grab();
                     break;
-                case "Shoot":
+                case "shoot":
                     Shoot();
                     break;
-                case "ReceiveDamage20":
+                case "receiveDamage20":
                     ReceiveDamage(20,true);
                     break;
-                case "ReceiveDamage50":
+                case "receiveDamage50":
                     ReceiveDamage(20, true);
                     break;
-                case "ReceiveDamageHole":
+                case "receiveDamageHole":
                     ReceiveDamage(1000);
                     break;
                 default:
