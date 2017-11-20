@@ -244,7 +244,7 @@ public class Agent : MonoBehaviour
                 query = "wumpus50";
                 break;
             case 1000:
-                query = "fedor";
+                query = "buraco";
                 break;
             default:
                 break;

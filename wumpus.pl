@@ -338,11 +338,13 @@ brilho :-
 
 wumpus20 :-
 	agent_next_location([X,Y]),
-	atualiza_wumpus_20([X,Y]).
+    assert(wumpus20_location([X,Y])),
+    assert(wumpus20_health([100], [X,Y])).
 
 wumpus50 :-
 	agent_next_location([X,Y]),
-	atualiza_wumpus_50([X,Y]).
+    assert(wumpus50_location([X,Y])),
+    assert(wumpus50_health([100], [X,Y])).
 
 buraco :-
 	agent_next_location([X,Y]),
