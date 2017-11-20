@@ -11,8 +11,8 @@
             [gold/1],
             [wumpus20_location/1],
             [wumpus50_location/1],
-            [wumpus20_health/1],
-            [wumpus50_health/1],
+            [wumpus20_health/2],
+            [wumpus50_health/2],
             [assume/1],
             [ammo/1] ).
 start :-
@@ -60,9 +60,13 @@ init_world_teste :-
     assert(gold([1,1])),
     assert(gold([8,1])),
     assert(wumpus20_location([3,1])),
+    assert(wumpus20_location([11, 10])),
     assert(wumpus50_location([4,3])),
-    assert(wumpus20_health([100])),
-    assert(wumpus50_health([100])).
+    assert(wumpus50_location([5,1])),
+    assert(wumpus20_health([100], [3,1])),
+    assert(wumpus20_health([100], [11,10])),
+    assert(wumpus50_health([100], [4,3])),
+    assert(wumpus50_health([100], [5,1])).
 
 
 %verificaçao dos acontecimentos ou mortes.
@@ -123,22 +127,20 @@ update_points([P]) :-
     retractall(agent_points(_)),
     assert(agent_points([NP])).
 
-update_wumpus20_health([D]) :-
-    wumpus20_location([X,Y]),
-    wumpus20_health([V]),
+update_wumpus20_health([D],[X,Y]) :-
+    wumpus20_health([V],[X,Y]),
     NV is V+D,
-    retractall(wumpus20_health(_)),
-    assert(wumpus20_health([NV])),
+    retractall(wumpus20_health([V],[X,Y])),
+    assert(wumpus20_health([NV],[X,Y])),
     ((is_wumpus20_dead([NV]))->retract(wumpus20_location([X,Y])),
     format("\nE com esse grito horrendo, a tao temida besta esta morta!\n");
     format("\nConsegui atingir a fera, mas o monstro ainda respira e parece irritado!\n ")).
 
-update_wumpus50_health([D]) :-
-    wumpus50_location([X,Y]),
-    wumpus50_health([V]),
+update_wumpus50_health([D],[X,Y]) :-
+    wumpus50_health([V],[X,Y]),
     NV is V+D,
-    retractall(wumpus50_health(_)),
-    assert(wumpus50_health([NV])),
+    retractall(wumpus50_health([V],[X,Y])),
+    assert(wumpus50_health([NV],[X,Y])),
     ((is_wumpus50_dead([NV]))->retract(wumpus50_location([X,Y])),
     format("\nE com esse grito horrendo, a tao temida besta esta morta!\n");
     format("\nConsegui atingir a fera, mas o monstro ainda respira e parece irritado!\n ")).
@@ -254,8 +256,8 @@ disparar :-
     M1 is M-1,
     retractall(ammo(_)),
     assert(ammo([M1])),
-    ((is_wumpus20([X1,Y1]))->update_wumpus20_health([-30]);
-    ((is_wumpus50([X1,Y1]))->update_wumpus50_healtn([-30]);
+    ((is_wumpus20([X1,Y1]))->update_wumpus20_health([-30],[X1,Y1]);
+    ((is_wumpus50([X1,Y1]))->update_wumpus50_healtn([-30],[X1,Y1]);
     format("\nO disparo atingiu uma pedra, parece que o wumpus nao estava aqui afinal de contas.\n")))).
     
 
