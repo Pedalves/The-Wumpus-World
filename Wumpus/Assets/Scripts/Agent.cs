@@ -67,11 +67,12 @@ public class Agent : MonoBehaviour
 
     IEnumerator CheckNextMove()
     {
+        int extra = 0;
         while (Health > 0)
         {
             GM.GetInstance().ReadyNextAction();
             yield return new WaitForSeconds(1);
-            switch (GM.GetInstance().GetCurrentAction())
+            switch (GM.GetInstance().GetCurrentAction(ref extra))
             {
                 case "move":
                     Move();
@@ -89,7 +90,7 @@ public class Agent : MonoBehaviour
                     Grab();
                     break;
                 case "shoot":
-                    Shoot();
+                    Shoot(extra);
                     break;
                 default:
                     break;
@@ -186,14 +187,17 @@ public class Agent : MonoBehaviour
         CurrentCell.GetComponent<Cell>().AgentInteract();
     }
 
-    void Shoot()
+    void Shoot(int damage = 0)
     {
         if(_ammunition > 0)
         {
             Points--;
             Points -= 10;
             _ammunition--;
-            int damage = Random.Range(20, 51);
+            if(damage == 0)
+            {
+                damage = Random.Range(20, 51);
+            }
             
             Cell tmpCell = null;
             Vector2 tmpPos = _pos;
