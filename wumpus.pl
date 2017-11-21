@@ -875,13 +875,14 @@ ready_next_action :-
 	X2 is X-1,
 	Y2 is Y-1,
 	(
+		is_brilho([X,Y]) -> 
+		(
+			retractall(agent_best_move(_)),
+			assert(agent_next_action(grab))
+		);
 		%se ja calculou a melhor casa
 		(agent_best_move([I,J])) -> 
 		(
-			is_brilho([X,Y]) -> (
-				retractall(agent_best_move(_)),
-				assert(agent_next_action(pegar))
-			);
 			(
 				(R == 0,I == X1,J==Y) -> 
 				(
@@ -1021,6 +1022,90 @@ ready_next_action :-
 					assert(agent_best_move([X,Y2]))
 				);
 				true
+			),
+
+			(agent_best_move([I2,J2])) -> 
+			(
+				(
+					(R == 0,I2 == X1,J2==Y) -> 
+					(
+						retractall(agent_best_move(_)),
+						next_move,
+						assert(agent_next_action(move))
+					);
+					(R == 1,I2 == X,J2==Y1) -> 
+					(
+						retractall(agent_best_move(_)),
+						next_move,
+						assert(agent_next_action(move))
+					);
+					(R == 2,I2 == X2,J2==Y) -> 
+					(
+						retractall(agent_best_move(_)),
+						next_move,
+						assert(agent_next_action(move))
+					);
+					(R == 3,I2 == X,J2==Y2) -> 
+					(
+						retractall(agent_best_move(_)),
+						next_move,
+						assert(agent_next_action(move))
+					)
+				);
+				(
+					(R == 0,I2 == X2) -> 
+					(
+						assert(agent_next_action(turnRight))
+					);
+					(R == 0,J2 == Y1) -> 
+					(
+						assert(agent_next_action(turnLeft))
+					);
+					(R == 0,J2 == Y2) -> 
+					(
+						assert(agent_next_action(turnRight))
+					);
+
+					(R == 1,J2 == Y2) -> 
+					(
+						assert(agent_next_action(turnRight))
+					);
+					(R == 1,I2 == X2) -> 
+					(
+						assert(agent_next_action(turnLeft))
+					);
+					(R == 1,I2 == X1) -> 
+					(
+						assert(agent_next_action(turnRight))
+					);
+
+					(R == 2,I2 == X1) -> 
+					(
+						assert(agent_next_action(turnRight))
+					);
+					(R == 2,J2 == Y1) -> 
+					(
+						assert(agent_next_action(turnRight))
+					);
+					(R == 2,J2 == Y2) -> 
+					(
+						assert(agent_next_action(turnLeft))
+					);
+
+					(R == 3,J2 == Y1) -> 
+					(
+						assert(agent_next_action(turnRight))
+					);
+					(R == 3,I2 == X2) -> 
+					(
+						assert(agent_next_action(turnRight))
+					);
+					(R == 3,I2 == X1) -> 
+					(
+						assert(agent_next_action(turnLeft))
+					);
+					true
+				)
 			)
 		
 		)
@@ -1053,4 +1138,5 @@ execute_current_action :-
 			move_back
 		); 
 		false
-	).
+	),
+	retractall(agent_next_action(_)).
