@@ -60,8 +60,10 @@ public class GM : MonoBehaviour
             try
             {
                 //PlQuery.PlCall("ensure_loaded('C:/Users/Lucas/Desktop/teste/wumpus.pl')");
-                PlQuery.PlCall("ensure_loaded('c:/Users/pedro/PrologProjects/The-Wumpus-World/wumpus.pl')");
-                PlQuery.PlCall("start");
+                PrologQuery("ensure_loaded('C:/Users/Lucas/Desktop/teste/wumpus.pl')");
+                //PlQuery.PlCall("ensure_loaded('c:/Users/pedro/PrologProjects/The-Wumpus-World/wumpus.pl')");
+                //PlQuery.PlCall("start");
+                PrologQuery("start");
                 Debug.Log("start");
             }
             catch (SbsSW.SwiPlCs.Exceptions.PlException ex)
@@ -125,18 +127,20 @@ public class GM : MonoBehaviour
         PointsText.text = "Points: " + points;
     }
 
-    public string GetCurrentAction()
+    public string GetCurrentAction(ref int extra)
     {
         string action = "";
         //PlQuery actionQuery = new PlQuery("agent_location([X,Y])");
         //actionQuery.NextSolution();
 
-        Debug.Log("agent");
-        PlQuery actionQuery = new PlQuery("agent_next_action(Action)");
+        //Debug.Log("agent");
+        PlQuery actionQuery = new PlQuery("agent_next_action(Action)");//PlQuery actionQuery = new PlQuery("agent_next_action(Action,Extra)");
+        ConsoleText.text += "agent_next_action(Action)" + "\n";
 
         foreach (PlQueryVariables s in actionQuery.SolutionVariables)
         {
             action = s["Action"].ToString();
+            //extra = int.Parse(s["Extra"].ToString());
             Debug.Log(action);
         }
 
@@ -148,16 +152,20 @@ public class GM : MonoBehaviour
 
     public void ReadyNextAction()
     {
-        Debug.Log("ready");
-        PlQuery actionQuery = new PlQuery("ready_next_action");
-        actionQuery.NextSolution();
-        actionQuery.Dispose();
+        //Debug.Log("ready");
+        //PlQuery actionQuery = new PlQuery("ready_next_action");
+        //actionQuery.NextSolution();
+        //actionQuery.Dispose();
+        //PlQuery.PlCall("ready_next_action");
+        PrologQuery("ready_next_action");
     }
 
     public void ExecuteCurrentAction()
     {
-        PlQuery actionQuery = new PlQuery("execute_current_action");
-        actionQuery.NextSolution();
-        actionQuery.Dispose();
+        //PlQuery actionQuery = new PlQuery("execute_current_action");
+        //actionQuery.NextSolution();
+        //actionQuery.Dispose();
+        //PlQuery.PlCall("execute_current_action");
+        PrologQuery("execute_current_action");
     }
 }
