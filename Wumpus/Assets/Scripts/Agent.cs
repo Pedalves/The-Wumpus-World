@@ -70,7 +70,7 @@ public class Agent : MonoBehaviour
         while (Health > 0)
         {
             GM.GetInstance().ReadyNextAction();
-            yield return new WaitForSeconds(2);
+            yield return new WaitForSeconds(1);
             switch (GM.GetInstance().GetCurrentAction())
             {
                 case "move":
@@ -96,6 +96,7 @@ public class Agent : MonoBehaviour
             }
             
             GM.GetInstance().ExecuteCurrentAction();
+            yield return new WaitForSeconds(1);
         }
     }
 
