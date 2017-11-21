@@ -428,11 +428,12 @@ update_points([P]) :-
 update_wumpus20_health([D],[X,Y]) :-
     wumpus20_health([V],[X,Y]),
     NV is V+D,
+    format("\n\nvalores nv = ~p, v = ~p, d = ~p\n\n", [NV, V, D]),
     retractall(wumpus20_health([V],[X,Y])),
     assert(wumpus20_health([NV],[X,Y])),
     ((is_wumpus20_dead([NV]))->retract(wumpus20_location([X,Y])),
     format("\nE com esse grito horrendo, a tao temida besta esta morta!\n");
-    format("\nConsegui atingir a fera, mas o monstro ainda respira e parece irritado!\n ")).
+    format("\nConsegui atingir a fera, mas o monstro ainda respira e parece irritado! ~p de dano causado, deixando o wumpus com ~p de vida\n ", [D,NV])).
 
 update_wumpus50_health([D],[X,Y]) :-
     wumpus50_health([V],[X,Y]),
@@ -698,8 +699,9 @@ disparar :-
     M1 is M-1,
     retractall(ammo(_)),
     assert(ammo([M1])),
-    ((is_wumpus20([X1,Y1]))->update_wumpus20_health([-30],[X1,Y1]);
-    ((is_wumpus50([X1,Y1]))->update_wumpus50_healtn([-30],[X1,Y1]);
+    random_between(20,50,D),
+    ((is_wumpus20([X1,Y1]))->update_wumpus20_health([-D],[X1,Y1]);
+    ((is_wumpus50([X1,Y1]))->update_wumpus50_healtn([-D],[X1,Y1]);
     format("\nO disparo atingiu uma pedra, parece que o wumpus nao estava aqui afinal de contas.\n")))).
     
 
