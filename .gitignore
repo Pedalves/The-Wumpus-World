@@ -38,3 +38,40 @@ Build/test/wumpus_Data/sharedassets0.assets.resS
 Build/wumpus_Data/output_log.txt
 Build/wumpus_Data/globalgamemanagers
 Build/wumpus_Data/Managed/Assembly-CSharp.dll
+Build/prolog test/wumpus.exe
+Build/prolog test/2017-11-21_153520/output_log.txt
+Build/prolog test/2017-11-21_153520/error.log
+Build/prolog test/2017-11-21_153520/crash.dmp
+Build/prolog test/wumpus_Data/sharedassets0.assets.resS
+Build/prolog test/wumpus_Data/level0
+Build/prolog test/wumpus_Data/globalgamemanagers.assets
+Build/prolog test/wumpus_Data/globalgamemanagers
+Build/prolog test/wumpus_Data/app.info
+Build/prolog test/wumpus_Data/Resources/unity_builtin_extra
+Build/prolog test/wumpus_Data/Resources/unity default resources
+Build/prolog test/wumpus_Data/Mono/mono.dll
+Build/prolog test/wumpus_Data/Mono/etc/mono/mconfig/config.xml
+Build/prolog test/wumpus_Data/Mono/etc/mono/2.0/web.config
+Build/prolog test/wumpus_Data/Mono/etc/mono/2.0/settings.map
+Build/prolog test/wumpus_Data/Mono/etc/mono/2.0/machine.config
+Build/prolog test/wumpus_Data/Mono/etc/mono/2.0/DefaultWsdlHelpGenerator.aspx
+Build/prolog test/wumpus_Data/Mono/etc/mono/1.0/machine.config
+Build/prolog test/wumpus_Data/Mono/etc/mono/1.0/DefaultWsdlHelpGenerator.aspx
+Build/prolog test/wumpus_Data/Mono/MonoPosixHelper.dll
+Build/prolog test/wumpus_Data/Managed/UnityEngine.dll
+Build/prolog test/wumpus_Data/Managed/UnityEngine.UI.dll
+Build/prolog test/wumpus_Data/Managed/UnityEngine.Networking.dll
+Build/prolog test/wumpus_Data/Managed/UnityEngine.Analytics.dll
+Build/prolog test/wumpus_Data/Managed/System.Core.dll
+Build/prolog test/wumpus_Data/Managed/SwiPlCs.dll
+Build/prolog test/wumpus_Data/Managed/Mono.Security.dll
+Build/prolog test/wumpus_Data/Managed/Assembly-CSharp.dll
+Build/prolog test/wumpus_Data/Managed/Assembly-CSharp-firstpass.dll
+Build/prolog test/wumpus_Data/Managed/mscorlib.dll
+Build/prolog test/wumpus_Data/Managed/UnityEngine.dll.mdb
+Build/prolog test/wumpus_Data/Managed/System.dll
+Build/prolog test/wumpus_Data/output_log.txt
+Build/prolog test/wumpus_Data/sharedassets0.assets
+Build/prolog test/wumpus_Data/Mono/etc/mono/config
+Build/prolog test/wumpus_Data/Mono/etc/mono/browscap.ini
+Build/prolog test/wumpus_Data/Mono/etc/mono/2.0/Browsers/Compat.browser
