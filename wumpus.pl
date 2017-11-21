@@ -6,9 +6,13 @@
 			[agent_next_location/1],
 			[agent_best_move/1],
             [agent_health/1],
-			[agent_map/3],
             [agent_points/1],
             [agent_rotation/1],
+            [agent_path/2],
+            [agent_steps/1],
+			[agent_map/3],
+            [agent_collected/1],
+            [agent_back/1],
             [pit_location/1],
             [gold/1],
             [wumpus20_location/1],
@@ -16,6 +20,7 @@
             [wumpus20_health/2],
             [wumpus50_health/2],
             [assume/1],
+            [gameRunning/1],
             [ammo/1] ).
 start :-
     init_agent,
@@ -23,6 +28,12 @@ start :-
 
 derrota :-
     format("\nO aventureiro encontrou um fim inesperado.\n\n Placar final\n"),
+    show.
+
+fim :-
+    format("\nO aventureiro saiu da caverna.\n\n Placar final\n"),
+    retractall(gameRunning(_)),
+    assert(gameRunning(false)),
     show.
 
 init_agent :-
@@ -34,8 +45,14 @@ init_agent :-
     retractall(agent_health(_)),
     retractall(agent_points(_)),
     retractall(agent_rotation(_)),
+    retractall(agent_path(_)),
+    retractall(agent_steps(_)),
+    retractall(agent_collected(_)),
+    retractall(agent_back(_)),
     retractall(ammo(_)),
 	retractall(agent_map(_,_,_)),
+    retractall(gameRunning(_)),
+    assert(gameRunning(true)),
     assert(agent_location([0,0])),
 	assert(agent_last_location([0,0])),
 	assert(agent_next_action(none)),
@@ -43,6 +60,10 @@ init_agent :-
     assert(agent_health([100])),
     assert(agent_points([0])),
     assert(agent_rotation([1])),
+    assert(agent_path([0,0],0)),
+    assert(agent_steps([0])),
+    assert(agent_collected([0])),
+    assert(agent_back(false)),
 	update_agent_map([0,0]),
     assert(ammo([5])).
 
@@ -97,8 +118,22 @@ show :-
 
 update_agent_location([X1,Y1]) :-
     agent_location([X,Y]),
+    agent_steps([S]),
+    S1 is S + 1,
     retractall( agent_location(_) ),
     assert( agent_location([X1,Y1]) ),
+    (
+    	agent_back(Back),
+		(
+			not(Back)->
+			(
+			    assert( agent_path([X1,Y1], S1) ),
+			    retractall(agent_steps(_)),
+			    assert(agent_steps([S1]))
+			);
+			true
+		)
+    ),
 	agent_last_location([Xo,Yo]),
     retractall( agent_last_location(_) ),
     assert( agent_last_location([X,Y]) ),
@@ -511,6 +546,12 @@ move :-
     update_agent_location([X1,Y1]),
     teste.
 
+climb :-
+    agent_location([X,Y]),
+    (X == 0, Y == 0)->
+    fim;
+    false.
+
 move_up :- 
 	agent_rotation([R1]),
 	(	
@@ -687,6 +728,18 @@ turn_right :-
 pegar :-
     agent_location([X,Y]),
     update_points([999]),
+    agent_collected([G]),
+    G1 is G+1,
+    retractall(agent_collected(_)),
+    assert(agent_collected([G1])),
+    (
+    	(G1 > 0) ->
+    	(
+    		retractall(agent_back(_)),
+    		assert(agent_back(true))
+    	);
+    	true
+    ),
     retractall(gold([X,Y])).
 
 
@@ -874,92 +927,114 @@ ready_next_action :-
 	Y1 is Y+1,
 	X2 is X-1,
 	Y2 is Y-1,
+	format("INITREADY"),
+	gameRunning(GM),
+	(GM)->
 	(
 		is_brilho([X,Y]) -> 
 		(
+			format("1111"),
 			retractall(agent_best_move(_)),
+			format("Grab"),
 			assert(agent_next_action(grab))
 		);
 		%se ja calculou a melhor casa
 		(agent_best_move([I,J])) -> 
 		(
+			format("2222"),
 			(
 				(R == 0,I == X1,J==Y) -> 
 				(
 					retractall(agent_best_move(_)),
 					next_move,
+					format("Move"),
 					assert(agent_next_action(move))
 				);
 				(R == 1,I == X,J==Y1) -> 
 				(
 					retractall(agent_best_move(_)),
 					next_move,
+					format("Move"),
 					assert(agent_next_action(move))
 				);
 				(R == 2,I == X2,J==Y) -> 
 				(
 					retractall(agent_best_move(_)),
 					next_move,
+					format("Move"),
 					assert(agent_next_action(move))
 				);
 				(R == 3,I == X,J==Y2) -> 
 				(
 					retractall(agent_best_move(_)),
 					next_move,
+					format("Move"),
 					assert(agent_next_action(move))
 				)
 			);
 			(
 				(R == 0,I == X2) -> 
 				(
-					assert(agent_next_action(turnRight))
+					assert(agent_next_action(turnRight)),
+					format("Right")
 				);
 				(R == 0,J == Y1) -> 
 				(
-					assert(agent_next_action(turnLeft))
+					assert(agent_next_action(turnLeft)),
+					format("Left")
 				);
 				(R == 0,J == Y2) -> 
 				(
-					assert(agent_next_action(turnRight))
+					assert(agent_next_action(turnRight)),
+					format("Right")
 				);
 
 				(R == 1,J == Y2) -> 
 				(
-					assert(agent_next_action(turnRight))
+					assert(agent_next_action(turnRight)),
+					format("Right")
 				);
 				(R == 1,I == X2) -> 
 				(
-					assert(agent_next_action(turnLeft))
+					assert(agent_next_action(turnLeft)),
+					format("Left")
 				);
 				(R == 1,I == X1) -> 
 				(
-					assert(agent_next_action(turnRight))
+					assert(agent_next_action(turnRight)),
+					format("Right")
 				);
 
 				(R == 2,I == X1) -> 
 				(
-					assert(agent_next_action(turnRight))
+					assert(agent_next_action(turnRight)),
+					format("Right")
 				);
 				(R == 2,J == Y1) -> 
 				(
-					assert(agent_next_action(turnRight))
+					assert(agent_next_action(turnRight)),
+					format("Right")
 				);
 				(R == 2,J == Y2) -> 
 				(
-					assert(agent_next_action(turnLeft))
+					assert(agent_next_action(turnLeft)),
+					format("Left")
 				);
 
 				(R == 3,J == Y1) -> 
 				(
-					assert(agent_next_action(turnRight))
+					assert(agent_next_action(turnRight)),
+					format("Right")
 				);
 				(R == 3,I == X2) -> 
 				(
-					assert(agent_next_action(turnRight))
+					assert(agent_next_action(turnRight)),
+					format("Right")
 				);
 				(R == 3,I == X1) -> 
 				(
-					assert(agent_next_action(turnLeft))
+					assert(agent_next_action(turnLeft)),
+					format("Left")
 				);
 				true
 			)
@@ -968,143 +1043,280 @@ ready_next_action :-
 		%calcula a melhor casa
 		
 		(
-			agent_map([X1, Y], Status1, Visited1),
-			agent_map([X2, Y], Status2, Visited2),
-			agent_map([X, Y1], Status3, Visited3),
-			agent_map([X, Y2], Status4, Visited4),
+			format("3333"),
+			agent_back(Back),
 			(
-				(Status1 == misterio, X1 =< 11)-> (
-					assert(agent_best_move([X1,Y]))
-				);
-				(Status2 == misterio, X2 >= 0)-> (
-					assert(agent_best_move([X2,Y]))
-				);
-				(Status3 == misterio, Y1 =< 11)-> (
-					assert(agent_best_move([X,Y1]))
-				);
-				(Status4 == misterio, Y2 >= 0)-> (
-					assert(agent_best_move([X,Y2]))
-				);
-				(Status1 == seguro, X1 =< 11)-> (
-					assert(agent_best_move([X1,Y]))
-				);
-				(Status2 == seguro, X2 >= 0)-> (
-					assert(agent_best_move([X2,Y]))
-				);
-				(Status3 == seguro, Y1 =< 11)-> (
-					assert(agent_best_move([X,Y1]))
-				);
-				(Status4 == seguro, Y2 >= 0)-> (
-					assert(agent_best_move([X,Y2]))
-				);
-				(Status1 == talvezWumpus, X1 =< 11)-> (
-					assert(agent_best_move([X1,Y]))
-				);
-				(Status2 == talvezWumpus, X2 >= 0)-> (
-					assert(agent_best_move([X2,Y]))
-				);
-				(Status3 == talvezWumpus, Y1 =< 11)-> (
-					assert(agent_best_move([X,Y1]))
-				);
-				(Status4 == talvezWumpus, Y2 >= 0)-> (
-					assert(agent_best_move([X,Y2]))
-				);
-				(Status1 == talvezBuraco, X1 =< 11)-> (
-					assert(agent_best_move([X1,Y]))
-				);
-				(Status2 == talvezBuraco, X2 >= 0)-> (
-					assert(agent_best_move([X2,Y]))
-				);
-				(Status3 == talvezBuraco, Y1 =< 11)-> (
-					assert(agent_best_move([X,Y1]))
-				);
-				(Status4 == talvezBuraco, Y2 >= 0)-> (
-					assert(agent_best_move([X,Y2]))
-				);
-				true
-			),
-
-			(agent_best_move([I2,J2])) -> 
-			(
+				(Back)->
 				(
-					(R == 0,I2 == X1,J2==Y) -> 
+					(X == 0, Y == 0)->
 					(
-						retractall(agent_best_move(_)),
-						next_move,
-						assert(agent_next_action(move))
+						assert(agent_next_action(climb))
 					);
-					(R == 1,I2 == X,J2==Y1) -> 
 					(
-						retractall(agent_best_move(_)),
-						next_move,
-						assert(agent_next_action(move))
-					);
-					(R == 2,I2 == X2,J2==Y) -> 
-					(
-						retractall(agent_best_move(_)),
-						next_move,
-						assert(agent_next_action(move))
-					);
-					(R == 3,I2 == X,J2==Y2) -> 
-					(
-						retractall(agent_best_move(_)),
-						next_move,
-						assert(agent_next_action(move))
+						format("4444"),
+						agent_steps([S]),
+						Step is S-1,
+						retractall(agent_steps(_)),
+						assert(agent_steps([Step])),
+						agent_path([Px,Py], Step),
+						retractall(agent_path([Px,Py], Step)),
+						assert(agent_best_move([Px,Py])),
+
+						(
+							(R == 0,Px == X1,Py==Y) -> 
+							(
+								retractall(agent_best_move(_)),
+								next_move,
+								assert(agent_next_action(move)),
+								format("Move")
+							);
+							(R == 1,Px == X,Py==Y1) -> 
+							(
+								retractall(agent_best_move(_)),
+								next_move,
+								assert(agent_next_action(move)),
+								format("Move")
+							);
+							(R == 2,Px == X2,Py==Y) -> 
+							(
+								retractall(agent_best_move(_)),
+								next_move,
+								assert(agent_next_action(move)),
+								format("Move")
+							);
+							(R == 3,Px == X,Py==Y2) -> 
+							(
+								retractall(agent_best_move(_)),
+								next_move,
+								assert(agent_next_action(move)),
+								format("Move")
+							)
+						);
+						(
+							(R == 0,Px == X2) -> 
+							(
+								assert(agent_next_action(turnRight)),
+								format("Right")
+							);
+							(R == 0,Py == Y1) -> 
+							(
+								assert(agent_next_action(turnLeft)),
+								format("Left")
+							);
+							(R == 0,Py == Y2) -> 
+							(
+								assert(agent_next_action(turnRight)),
+								format("Right")
+							);
+
+							(R == 1,Py == Y2) -> 
+							(
+								assert(agent_next_action(turnRight)),
+								format("Right")
+							);
+							(R == 1,Px == X2) -> 
+							(
+								assert(agent_next_action(turnLeft)),
+								format("Left")
+							);
+							(R == 1,Px == X1) -> 
+							(
+								assert(agent_next_action(turnRight)),
+								format("Right")
+							);
+
+							(R == 2,Px == X1) -> 
+							(
+								assert(agent_next_action(turnRight)),
+								format("Right")
+							);
+							(R == 2,Py == Y1) -> 
+							(
+								assert(agent_next_action(turnRight)),
+								format("Right")
+							);
+							(R == 2,Py == Y2) -> 
+							(
+								assert(agent_next_action(turnLeft)),
+								format("Left")
+							);
+
+							(R == 3,Py == Y1) -> 
+							(
+								assert(agent_next_action(turnRight)),
+								format("Right")
+							);
+							(R == 3,Px == X2) -> 
+							(
+								assert(agent_next_action(turnRight)),
+								format("Right")
+							);
+							(R == 3,Px == X1) -> 
+							(
+								assert(agent_next_action(turnLeft)),
+								format("Left")
+							);
+							true
+						)
 					)
 				);
 				(
-					(R == 0,I2 == X2) -> 
+					format("5555"),
+					agent_map([X1, Y], Status1, Visited1),
+					agent_map([X2, Y], Status2, Visited2),
+					agent_map([X, Y1], Status3, Visited3),
+					agent_map([X, Y2], Status4, Visited4),
 					(
-						assert(agent_next_action(turnRight))
-					);
-					(R == 0,J2 == Y1) -> 
-					(
-						assert(agent_next_action(turnLeft))
-					);
-					(R == 0,J2 == Y2) -> 
-					(
-						assert(agent_next_action(turnRight))
-					);
+						(Status1 == misterio, X1 =< 11)-> (
+							assert(agent_best_move([X1,Y]))
+						);
+						(Status2 == misterio, X2 >= 0)-> (
+							assert(agent_best_move([X2,Y]))
+						);
+						(Status3 == misterio, Y1 =< 11)-> (
+							assert(agent_best_move([X,Y1]))
+						);
+						(Status4 == misterio, Y2 >= 0)-> (
+							assert(agent_best_move([X,Y2]))
+						);
+						(Status1 == seguro, X1 =< 11)-> (
+							assert(agent_best_move([X1,Y]))
+						);
+						(Status2 == seguro, X2 >= 0)-> (
+							assert(agent_best_move([X2,Y]))
+						);
+						(Status3 == seguro, Y1 =< 11)-> (
+							assert(agent_best_move([X,Y1]))
+						);
+						(Status4 == seguro, Y2 >= 0)-> (
+							assert(agent_best_move([X,Y2]))
+						);
+						(Status1 == talvezWumpus, X1 =< 11)-> (
+							assert(agent_best_move([X1,Y]))
+						);
+						(Status2 == talvezWumpus, X2 >= 0)-> (
+							assert(agent_best_move([X2,Y]))
+						);
+						(Status3 == talvezWumpus, Y1 =< 11)-> (
+							assert(agent_best_move([X,Y1]))
+						);
+						(Status4 == talvezWumpus, Y2 >= 0)-> (
+							assert(agent_best_move([X,Y2]))
+						);
+						(Status1 == talvezBuraco, X1 =< 11)-> (
+							assert(agent_best_move([X1,Y]))
+						);
+						(Status2 == talvezBuraco, X2 >= 0)-> (
+							assert(agent_best_move([X2,Y]))
+						);
+						(Status3 == talvezBuraco, Y1 =< 11)-> (
+							assert(agent_best_move([X,Y1]))
+						);
+						(Status4 == talvezBuraco, Y2 >= 0)-> (
+							assert(agent_best_move([X,Y2]))
+						);
+						true
+					),
 
-					(R == 1,J2 == Y2) -> 
+					(agent_best_move([I2,J2])) -> 
 					(
-						assert(agent_next_action(turnRight))
-					);
-					(R == 1,I2 == X2) -> 
-					(
-						assert(agent_next_action(turnLeft))
-					);
-					(R == 1,I2 == X1) -> 
-					(
-						assert(agent_next_action(turnRight))
-					);
+						(
+							(R == 0,I2 == X1,J2==Y) -> 
+							(
+								retractall(agent_best_move(_)),
+								next_move,
+								assert(agent_next_action(move)),
+								format("Move")
+							);
+							(R == 1,I2 == X,J2==Y1) -> 
+							(
+								retractall(agent_best_move(_)),
+								next_move,
+								assert(agent_next_action(move)),
+								format("Move")
+							);
+							(R == 2,I2 == X2,J2==Y) -> 
+							(
+								retractall(agent_best_move(_)),
+								next_move,
+								assert(agent_next_action(move)),
+								format("Move")
+							);
+							(R == 3,I2 == X,J2==Y2) -> 
+							(
+								retractall(agent_best_move(_)),
+								next_move,
+								assert(agent_next_action(move)),
+								format("Move")
+							)
+						);
+						(
+							(R == 0,I2 == X2) -> 
+							(
+								assert(agent_next_action(turnRight)),
+								format("Right")
+							);
+							(R == 0,J2 == Y1) -> 
+							(
+								assert(agent_next_action(turnLeft)),
+								format("Left")
+							);
+							(R == 0,J2 == Y2) -> 
+							(
+								assert(agent_next_action(turnRight)),
+								format("Right")
+							);
 
-					(R == 2,I2 == X1) -> 
-					(
-						assert(agent_next_action(turnRight))
-					);
-					(R == 2,J2 == Y1) -> 
-					(
-						assert(agent_next_action(turnRight))
-					);
-					(R == 2,J2 == Y2) -> 
-					(
-						assert(agent_next_action(turnLeft))
-					);
+							(R == 1,J2 == Y2) -> 
+							(
+								assert(agent_next_action(turnRight)),
+								format("Right")
+							);
+							(R == 1,I2 == X2) -> 
+							(
+								assert(agent_next_action(turnLeft)),
+								format("Left")
+							);
+							(R == 1,I2 == X1) -> 
+							(
+								assert(agent_next_action(turnRight)),
+								format("Right")
+							);
 
-					(R == 3,J2 == Y1) -> 
-					(
-						assert(agent_next_action(turnRight))
-					);
-					(R == 3,I2 == X2) -> 
-					(
-						assert(agent_next_action(turnRight))
-					);
-					(R == 3,I2 == X1) -> 
-					(
-						assert(agent_next_action(turnLeft))
-					);
-					true
+							(R == 2,I2 == X1) -> 
+							(
+								assert(agent_next_action(turnRight)),
+								format("Right")
+							);
+							(R == 2,J2 == Y1) -> 
+							(
+								assert(agent_next_action(turnRight)),
+								format("Right")
+							);
+							(R == 2,J2 == Y2) -> 
+							(
+								assert(agent_next_action(turnLeft)),
+								format("Left")
+							);
+
+							(R == 3,J2 == Y1) -> 
+							(
+								assert(agent_next_action(turnRight)),
+								format("Right")
+							);
+							(R == 3,I2 == X2) -> 
+							(
+								assert(agent_next_action(turnRight)),
+								format("Right")
+							);
+							(R == 3,I2 == X1) -> 
+							(
+								assert(agent_next_action(turnLeft)),
+								format("Left")
+							);
+							true
+						)
+					)
 				)
 			)
 		
@@ -1126,7 +1338,7 @@ execute_current_action :-
 			turn_left
 		); 
 		(Action == climb) -> (
-			move
+			climb
 		); 
 		(Action == grab) -> (
 			pegar
@@ -1139,4 +1351,5 @@ execute_current_action :-
 		); 
 		false
 	),
+	format(Action),
 	retractall(agent_next_action(_)).
