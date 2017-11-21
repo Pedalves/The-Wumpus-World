@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using SbsSW.SwiPlCs;
+using SbsSW.SwiPlCs.Streams;
 
 public class GM : MonoBehaviour
 {
@@ -17,6 +18,13 @@ public class GM : MonoBehaviour
 
     static private GM _instance;
 
+    //static long Swrite(IntPtr handle, string buffer, long buffersize)
+    //{
+    //    string s = buffer.Substring(0, (int)buffersize);
+    //    Debug.Log("Prolog OUTPUT: " + s);
+    //    return buffersize;
+    //}
+
     private void Awake()
     {
         if(_instance)
@@ -27,6 +35,11 @@ public class GM : MonoBehaviour
         {
             _instance = this;
         }
+    }
+
+    private void OnApplicationQuit()
+    {
+        PlEngine.PlCleanup();
     }
 
     // Use this for initialization
@@ -40,10 +53,13 @@ public class GM : MonoBehaviour
         {
             String[] param = { "-q"/*, "-f", Application.dataPath + "/Resources/wumpus.pl"*/ };
             PlEngine.Initialize(param);
+            
+            //var wf = new DelegateStreamWriteFunction(Swrite);
+            //PlEngine.SetStreamFunctionWrite(PlStreamType.Output, wf);
 
             try
             {
-                PlQuery.PlCall("consult('c:/Users/pedro/PrologProjects/The-Wumpus-World/wumpus.pl')");
+                PlQuery.PlCall("ensure_loaded('C:/Users/Lucas/Desktop/teste/wumpus.pl')");//PlQuery.PlCall("consult('e:/Lipe/PUC #/8º Período/ia/Wumpus/wumpus.pl')");
                 PlQuery.PlCall("start");
                 Debug.Log("start");
             }
