@@ -290,7 +290,7 @@ update_agent_map([X,Y]) :-
 					
 				)
 				
-			);
+			)
 			
 		);
 		
