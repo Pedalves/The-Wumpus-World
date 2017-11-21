@@ -1,2 +1,0 @@
-calcular movimento dps de calcular casa.
-botar brilho antes de checar se tem casa calculada
