@@ -1009,7 +1009,7 @@ ready_next_action :-
 				(Status4 == talvezWumpus, Y2 >= 0)-> (
 					assert(agent_best_move([X,Y2]))
 				);
-				Status1 == Wumpus, X1 =< 11)-> (
+				(Status1 == Wumpus, X1 =< 11)-> (
 					assert(agent_best_move([X1,Y]))
 				);
 				(Status2 == Wumpus, X2 >= 0)-> (
@@ -1043,29 +1043,40 @@ ready_next_action :-
 					(
 						retractall(agent_best_move(_)),
 						next_move,
-						assert(agent_best_move([X,Y2]))
-						((Status1 == wumpus)-> (assert(agent_next_action(disparar));
+						(Status1 == wumpus)-> 
+						(
+							assert(agent_next_action(disparar))
+						);
 						assert(agent_next_action(move))
 					);
 					(R == 1,I2 == X,J2==Y1) -> 
 					(
 						retractall(agent_best_move(_)),
 						next_move,
-						((Status2 == wumpus)-> (assert(agent_next_action(disparar));
+						(Status2 == wumpus)-> (
+							assert(agent_next_action(disparar))
+								
+						);
 						assert(agent_next_action(move))
 					);
 					(R == 2,I2 == X2,J2==Y) -> 
 					(
 						retractall(agent_best_move(_)),
 						next_move,
-						((Status3 == wumpus)-> (assert(agent_next_action(disparar));
+						(Status3 == wumpus)-> 
+						(
+							assert(agent_next_action(disparar))
+						);
 						assert(agent_next_action(move))
 					);
 					(R == 3,I2 == X,J2==Y2) -> 
 					(
 						retractall(agent_best_move(_)),
 						next_move,
-						((Status4 == wumpus)-> (assert(agent_next_action(disparar));
+						(Status4 == wumpus)-> 
+						(
+							assert(agent_next_action(disparar))
+						);
 						assert(agent_next_action(move))
 					)
 				);
