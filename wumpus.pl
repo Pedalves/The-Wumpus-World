@@ -973,52 +973,52 @@ ready_next_action :-
 			agent_map([X, Y1], Status3, Visited3),
 			agent_map([X, Y2], Status4, Visited4),
 			(
-				(Status1 == misterio)-> (
+				(Status1 == misterio, X1 =< 11)-> (
 					assert(agent_best_move([X1,Y]))
 				);
-				(Status2 == misterio)-> (
+				(Status2 == misterio, X2 >= 0)-> (
 					assert(agent_best_move([X2,Y]))
 				);
-				(Status3 == misterio)-> (
+				(Status3 == misterio, Y1 =< 11)-> (
 					assert(agent_best_move([X,Y1]))
 				);
-				(Status4 == misterio)-> (
+				(Status4 == misterio, Y2 >= 0)-> (
 					assert(agent_best_move([X,Y2]))
 				);
-				(Status1 == seguro)-> (
+				(Status1 == seguro, X1 =< 11)-> (
 					assert(agent_best_move([X1,Y]))
 				);
-				(Status2 == seguro)-> (
+				(Status2 == seguro, X2 >= 0)-> (
 					assert(agent_best_move([X2,Y]))
 				);
-				(Status3 == seguro)-> (
+				(Status3 == seguro, Y1 =< 11)-> (
 					assert(agent_best_move([X,Y1]))
 				);
-				(Status4 == seguro)-> (
+				(Status4 == seguro, Y2 >= 0)-> (
 					assert(agent_best_move([X,Y2]))
 				);
-				(Status1 == talvezWumpus)-> (
+				(Status1 == talvezWumpus, X1 =< 11)-> (
 					assert(agent_best_move([X1,Y]))
 				);
-				(Status2 == talvezWumpus)-> (
+				(Status2 == talvezWumpus, X2 >= 0)-> (
 					assert(agent_best_move([X2,Y]))
 				);
-				(Status3 == talvezWumpus)-> (
+				(Status3 == talvezWumpus, Y1 =< 11)-> (
 					assert(agent_best_move([X,Y1]))
 				);
-				(Status4 == talvezWumpus)-> (
+				(Status4 == talvezWumpus, Y2 >= 0)-> (
 					assert(agent_best_move([X,Y2]))
 				);
-				(Status1 == talvezBuraco)-> (
+				(Status1 == talvezBuraco, X1 =< 11)-> (
 					assert(agent_best_move([X1,Y]))
 				);
-				(Status2 == talvezBuraco)-> (
+				(Status2 == talvezBuraco, X2 >= 0)-> (
 					assert(agent_best_move([X2,Y]))
 				);
-				(Status3 == talvezBuraco)-> (
+				(Status3 == talvezBuraco, Y1 =< 11)-> (
 					assert(agent_best_move([X,Y1]))
 				);
-				(Status4 == talvezBuraco)-> (
+				(Status4 == talvezBuraco, Y2 >= 0)-> (
 					assert(agent_best_move([X,Y2]))
 				);
 				true
