@@ -51,7 +51,7 @@ public class GM : MonoBehaviour
         Environment.SetEnvironmentVariable("Path", Environment.GetEnvironmentVariable("Path") + @";C:\Program Files (x86)\swipl;C:\Program Files (x86)\swipl\bin");
         if (!PlEngine.IsInitialized)
         {
-            String[] param = { "-q"/*, "-f", Application.dataPath + "/Resources/wumpus.pl"*/ };
+            String[] param = { "-q" };
             PlEngine.Initialize(param);
             
             //var wf = new DelegateStreamWriteFunction(Swrite);
@@ -59,7 +59,8 @@ public class GM : MonoBehaviour
 
             try
             {
-                PlQuery.PlCall("ensure_loaded('C:/Users/Lucas/Desktop/teste/wumpus.pl')");//PlQuery.PlCall("consult('e:/Lipe/PUC #/8º Período/ia/Wumpus/wumpus.pl')");
+                //PlQuery.PlCall("ensure_loaded('C:/Users/Lucas/Desktop/teste/wumpus.pl')");
+                PlQuery.PlCall("ensure_loaded('c:/Users/pedro/PrologProjects/The-Wumpus-World/wumpus.pl')");
                 PlQuery.PlCall("start");
                 Debug.Log("start");
             }

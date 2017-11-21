@@ -4,6 +4,7 @@
 			[agent_last_location/1],
 			[agent_next_action/1],
 			[agent_next_location/1],
+			[agent_best_move/1],
             [agent_health/1],
 			[agent_map/3],
             [agent_points/1],
@@ -29,6 +30,7 @@ init_agent :-
 	retractall(agent_last_location(_)),
 	retractall(agent_next_action(_)),
 	retractall(agent_next_location(_)),
+	retractall(agent_best_move(_)),
     retractall(agent_health(_)),
     retractall(agent_points(_)),
     retractall(agent_rotation(_)),
@@ -456,8 +458,7 @@ teste :-
     (is_wumpus50([X,Y])->format("\nAtacado pelo Wumpus!\n"),
     update_health([-50]),
     update_points([-50]);
-    is_gold([X,Y])->format("\nUm dos tesouros do Wumpus! Estou rico!\n"),
-    pegar;
+    is_gold([X,Y])->format("\nUm dos tesouros do Wumpus! Estou rico!\n");
     format("\n\nNada aqui\n\n")))),
     show.
 
@@ -685,7 +686,7 @@ turn_right :-
 pegar :-
     agent_location([X,Y]),
     update_points([999]),
-    retract(gold([X,Y])).
+    retractall(gold([X,Y])).
 
 
 disparar :-
@@ -724,17 +725,122 @@ is_safe([X,Y]) :-
 	not(is_fedor([X,Y])).
 	
 vento :-
-    agent_next_location([X,Y]),
-    talvez_buraco([X-1,Y]),
-    talvez_buraco([X,Y+1]),
-    talvez_buraco([X,Y-1]).
+	agent_location([X,Y]),
+	X1 is X+1,
+	Y1 is Y+1,
+	X2 is X-1,
+	Y2 is Y-1,
+    (agent_map([X1,Y],StatusV1,VisitedV1) ->
+	(
+		(not(VisitedV1), (StatusV1 \== seguro))-> 
+		(
+			retractall(agent_map([X1,Y],StatusV1,VisitedV1)),
+			assert(agent_map([X1,Y],talvezBuraco,VisitedV1))
+		);
+		true
+	);
+    (
+		assert(agent_map([X1,Y],talvezBuraco,false))
+    ),
+
+    (agent_map([X,Y1],StatusV2,VisitedV2) ->
+	(
+		(not(VisitedV2), (StatusV2 \== seguro))-> 
+		(
+			retractall(agent_map([X,Y1],StatusV2,VisitedV2)),
+			assert(agent_map([X,Y1],talvezBuraco,VisitedV2))
+		);
+		true
+	);
+    (
+		assert(agent_map([X,Y1],talvezBuraco,false))
+    ),
+
+    (agent_map([X2,Y],StatusV3,VisitedV3) ->
+	(
+		(not(VisitedV3), (StatusV3 \== seguro))-> 
+		(
+			retractall(agent_map([X2,Y],StatusV3,VisitedV3)),
+			assert(agent_map([X2,Y],talvezBuraco,VisitedV3))
+		);
+		true
+	);
+    (
+		assert(agent_map([X2,Y],talvezBuraco,false))
+    ),
+
+    (agent_map([X,Y2],StatusV4,VisitedV4) ->
+	(
+		(not(VisitedV4), (StatusV4 \== seguro))-> 
+		(
+			retractall(agent_map([X,Y2],StatusV4,VisitedV4)),
+			assert(agent_map([X,Y2],talvezBuraco,VisitedV4))
+		);
+		true
+	);
+    (
+		assert(agent_map([X,Y2],talvezBuraco,false))
+    ).
+	
 
 
 fedor :-
     agent_next_location([X,Y]),
-    talvez_wumpus([X-1,Y]),
-    talvez_wumpus([X,Y+1]),
-    talvez_wumpus([X,Y-1]).
+	X1 is X+1,
+	Y1 is Y+1,
+	X2 is X-1,
+	Y2 is Y-1,
+    (agent_map([X1,Y],StatusV1,VisitedV1) ->
+	(
+		(not(VisitedV1), (StatusV1 \== seguro))-> 
+		(
+			retractall(agent_map([X1,Y],StatusV1,VisitedV1)),
+			assert(agent_map([X1,Y],talvezWumpus,VisitedV1))
+		);
+		true
+	);
+    (
+		assert(agent_map([X1,Y],talvezWumpus,false))
+    ),
+
+    (agent_map([X,Y1],StatusV2,VisitedV2) ->
+	(
+		(not(VisitedV2), (StatusV2 \== seguro))-> 
+		(
+			retractall(agent_map([X,Y1],StatusV2,VisitedV2)),
+			assert(agent_map([X,Y1],talvezWumpus,VisitedV2))
+		);
+		true
+	);
+    (
+		assert(agent_map([X,Y1],talvezWumpus,false))
+    ),
+
+    (agent_map([X2,Y],StatusV3,VisitedV3) ->
+	(
+		(not(VisitedV3), (StatusV3 \== seguro))-> 
+		(
+			retractall(agent_map([X2,Y],StatusV3,VisitedV3)),
+			assert(agent_map([X2,Y],talvezWumpus,VisitedV3))
+		);
+		true
+	);
+    (
+		assert(agent_map([X2,Y],talvezWumpus,false))
+    ),
+
+    (agent_map([X,Y2],StatusV4,VisitedV4) ->
+	(
+		(not(VisitedV4), (StatusV4 \== seguro))-> 
+		(
+			retractall(agent_map([X,Y2],StatusV4,VisitedV4)),
+			assert(agent_map([X,Y2],talvezWumpus,VisitedV4))
+		);
+		true
+	);
+    (
+		assert(agent_map([X,Y2],talvezWumpus,false))
+    ).
 
 brilho :-
 	agent_next_location([X,Y]),
@@ -761,49 +867,171 @@ ready_next_action :-
 	retractall(agent_next_action(_)),
 	
 	agent_location([X,Y]),
+	agent_rotation([R]),
+	X1 is X+1,
+	Y1 is Y+1,
+	X2 is X-1,
+	Y2 is Y-1,
 	(
-		(is_vento([X,Y]))->(
-			(X1 is X+1,Y1 is Y+1,agent_map([X1,Y1]))->(
-				(is_vento([X1,Y1]))->(
-					assert(agent_map([X1,Y1]):-true),
-					move_left,
-					format('asdasdsdasdas11111')
+		%se ja calculou a melhor casa
+		(agent_best_move([I,J])) -> 
+		(
+			is_brilho([X,Y]) -> (
+				retractall(agent_best_move(_)),
+				assert(agent_next_action(pegar))
+			);
+			(
+				(R == 0,I == X1,J==Y) -> 
+				(
+					retractall(agent_best_move(_)),
+					next_move,
+					assert(agent_next_action(move))
+				);
+				(R == 1,I == X,J==Y1) -> 
+				(
+					retractall(agent_best_move(_)),
+					next_move,
+					assert(agent_next_action(move))
+				);
+				(R == 2,I == X2,J==Y) -> 
+				(
+					retractall(agent_best_move(_)),
+					next_move,
+					assert(agent_next_action(move))
+				);
+				(R == 3,I == X,J==Y2) -> 
+				(
+					retractall(agent_best_move(_)),
+					next_move,
+					assert(agent_next_action(move))
 				)
 			);
-			(X2 is X+1,Y2 is Y-1,agent_map([X2,Y2]))->(
-				(is_vento([X2,Y2]))->(
-					assert(agent_map([X2,Y2]):-true),
-					move_left,
-					format('asdasdsdasdas22222')
-				)
-			);
-			(X3 is X-1,Y3 is Y+1,agent_map([X3,Y3]))->(
-				(is_vento([X3,Y3]))->(
-					assert(agent_map([X3,Y3]):-true),
-					move_right,
-					format('asdasdsdasdas33333')
-				)
-			);
-			(X4 is X-1,Y4 is Y-1,agent_map([X4,Y4]))->(
-				(is_vento([X4,Y4]))->(
-					assert(agent_map([X4,Y4]):-true),
-					move_right,
-					format('asdasdsdasdas44444')
-				)
-			);
-			move_back,
-			turn_left
+			(
+				(R == 0,I == X2) -> 
+				(
+					assert(agent_next_action(turnRight))
+				);
+				(R == 0,J == Y1) -> 
+				(
+					assert(agent_next_action(turnLeft))
+				);
+				(R == 0,J == Y2) -> 
+				(
+					assert(agent_next_action(turnRight))
+				);
+
+				(R == 1,J == Y2) -> 
+				(
+					assert(agent_next_action(turnRight))
+				);
+				(R == 1,I == X2) -> 
+				(
+					assert(agent_next_action(turnLeft))
+				);
+				(R == 1,I == X1) -> 
+				(
+					assert(agent_next_action(turnRight))
+				);
+
+				(R == 2,I == X1) -> 
+				(
+					assert(agent_next_action(turnRight))
+				);
+				(R == 2,J == Y1) -> 
+				(
+					assert(agent_next_action(turnRight))
+				);
+				(R == 2,J == Y2) -> 
+				(
+					assert(agent_next_action(turnLeft))
+				);
+
+				(R == 3,J == Y1) -> 
+				(
+					assert(agent_next_action(turnRight))
+				);
+				(R == 3,I == X2) -> 
+				(
+					assert(agent_next_action(turnRight))
+				);
+				(R == 3,I == X1) -> 
+				(
+					assert(agent_next_action(turnLeft))
+				);
+				true
+			)
 		);
-		adjust_rotation,
-		move,
-		next_move,
-		assert(agent_next_action(move))
-	).
+		
+		%calcula a melhor casa
+		
+		(
+			agent_map([X1, Y], Status1, Visited1),
+			agent_map([X2, Y], Status2, Visited2),
+			agent_map([X, Y1], Status3, Visited3),
+			agent_map([X, Y2], Status4, Visited4),
+			(
+				(Status1 == misterio)-> (
+					assert(agent_best_move([X1,Y]))
+				);
+				(Status2 == misterio)-> (
+					assert(agent_best_move([X2,Y]))
+				);
+				(Status3 == misterio)-> (
+					assert(agent_best_move([X,Y1]))
+				);
+				(Status4 == misterio)-> (
+					assert(agent_best_move([X,Y2]))
+				);
+				(Status1 == seguro)-> (
+					assert(agent_best_move([X1,Y]))
+				);
+				(Status2 == seguro)-> (
+					assert(agent_best_move([X2,Y]))
+				);
+				(Status3 == seguro)-> (
+					assert(agent_best_move([X,Y1]))
+				);
+				(Status4 == seguro)-> (
+					assert(agent_best_move([X,Y2]))
+				);
+				(Status1 == talvezWumpus)-> (
+					assert(agent_best_move([X1,Y]))
+				);
+				(Status2 == talvezWumpus)-> (
+					assert(agent_best_move([X2,Y]))
+				);
+				(Status3 == talvezWumpus)-> (
+					assert(agent_best_move([X,Y1]))
+				);
+				(Status4 == talvezWumpus)-> (
+					assert(agent_best_move([X,Y2]))
+				);
+				(Status1 == talvezBuraco)-> (
+					assert(agent_best_move([X1,Y]))
+				);
+				(Status2 == talvezBuraco)-> (
+					assert(agent_best_move([X2,Y]))
+				);
+				(Status3 == talvezBuraco)-> (
+					assert(agent_best_move([X,Y1]))
+				);
+				(Status4 == talvezBuraco)-> (
+					assert(agent_best_move([X,Y2]))
+				);
+				true
+			)
+		
+		)
+	),
+	!.
 	
 
 execute_current_action :-
 	agent_next_action(Action),
 	(	 
+		(Action == move) -> (
+            move
+        ); 
 		(Action == turnRight) -> (
 			turn_right
 		); 

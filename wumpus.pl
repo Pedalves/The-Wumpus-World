@@ -964,10 +964,66 @@ ready_next_action :-
 		
 		%calcula a melhor casa
 		
+		(
+			agent_map([X1, Y], Status1, Visited1),
+			agent_map([X2, Y], Status2, Visited2),
+			agent_map([X, Y1], Status3, Visited3),
+			agent_map([X, Y2], Status4, Visited4),
+			(
+				(Status1 == misterio)-> (
+					assert(agent_best_move([X1,Y]))
+				);
+				(Status2 == misterio)-> (
+					assert(agent_best_move([X2,Y]))
+				);
+				(Status3 == misterio)-> (
+					assert(agent_best_move([X,Y1]))
+				);
+				(Status4 == misterio)-> (
+					assert(agent_best_move([X,Y2]))
+				);
+				(Status1 == seguro)-> (
+					assert(agent_best_move([X1,Y]))
+				);
+				(Status2 == seguro)-> (
+					assert(agent_best_move([X2,Y]))
+				);
+				(Status3 == seguro)-> (
+					assert(agent_best_move([X,Y1]))
+				);
+				(Status4 == seguro)-> (
+					assert(agent_best_move([X,Y2]))
+				);
+				(Status1 == talvezWumpus)-> (
+					assert(agent_best_move([X1,Y]))
+				);
+				(Status2 == talvezWumpus)-> (
+					assert(agent_best_move([X2,Y]))
+				);
+				(Status3 == talvezWumpus)-> (
+					assert(agent_best_move([X,Y1]))
+				);
+				(Status4 == talvezWumpus)-> (
+					assert(agent_best_move([X,Y2]))
+				);
+				(Status1 == talvezBuraco)-> (
+					assert(agent_best_move([X1,Y]))
+				);
+				(Status2 == talvezBuraco)-> (
+					assert(agent_best_move([X2,Y]))
+				);
+				(Status3 == talvezBuraco)-> (
+					assert(agent_best_move([X,Y1]))
+				);
+				(Status4 == talvezBuraco)-> (
+					assert(agent_best_move([X,Y2]))
+				);
+				true
+			)
 		
-		assert(agent_best_move([1,0]))
-
-	).
+		)
+	),
+	!.
 	
 
 execute_current_action :-
