@@ -4,6 +4,7 @@
 			[agent_last_location/1],
 			[agent_next_action/1],
 			[agent_next_location/1],
+			[agent_best_move/1],
             [agent_health/1],
 			[agent_map/3],
             [agent_points/1],
@@ -29,6 +30,7 @@ init_agent :-
 	retractall(agent_last_location(_)),
 	retractall(agent_next_action(_)),
 	retractall(agent_next_location(_)),
+	retractall(agent_best_move(_)),
     retractall(agent_health(_)),
     retractall(agent_points(_)),
     retractall(agent_rotation(_)),
@@ -761,49 +763,104 @@ ready_next_action :-
 	retractall(agent_next_action(_)),
 	
 	agent_location([X,Y]),
+	agent_rotation([R]),
+	X1 is X+1,
+	Y1 is Y+1,
+	X2 is X-1,
+	Y2 is Y-1,
 	(
-		(is_vento([X,Y]))->(
-			(X1 is X+1,Y1 is Y+1,agent_map([X1,Y1]))->(
-				(is_vento([X1,Y1]))->(
-					assert(agent_map([X1,Y1]):-true),
-					move_left,
-					format('asdasdsdasdas11111')
-				)
+		%se ja calculou a melhor casa
+		(agent_best_move[I,J]) -> 
+		(
+			(R == 0,I == X1,J==Y) -> 
+			(
+				retractall(agent_best_move(_)),
+				next_move,
+				assert(agent_next_action(move))
 			);
-			(X2 is X+1,Y2 is Y-1,agent_map([X2,Y2]))->(
-				(is_vento([X2,Y2]))->(
-					assert(agent_map([X2,Y2]):-true),
-					move_left,
-					format('asdasdsdasdas22222')
-				)
+			(R == 1,I == X,J==Y1) -> 
+			(
+				retractall(agent_best_move(_)),
+				next_move,
+				assert(agent_next_action(move))
 			);
-			(X3 is X-1,Y3 is Y+1,agent_map([X3,Y3]))->(
-				(is_vento([X3,Y3]))->(
-					assert(agent_map([X3,Y3]):-true),
-					move_right,
-					format('asdasdsdasdas33333')
-				)
+			(R == 2,I == X2,J==Y) -> 
+			(
+				retractall(agent_best_move(_)),
+				next_move,
+				assert(agent_next_action(move))
 			);
-			(X4 is X-1,Y4 is Y-1,agent_map([X4,Y4]))->(
-				(is_vento([X4,Y4]))->(
-					assert(agent_map([X4,Y4]):-true),
-					move_right,
-					format('asdasdsdasdas44444')
-				)
+			(R == 3,I == X,J==Y2) -> 
+			(
+				retractall(agent_best_move(_)),
+				next_move,
+				assert(agent_next_action(move))
 			);
-			move_back,
-			turn_left
+			(
+				(R == 0,I == X2) -> 
+				(
+					assert(agent_next_action(turnRight))
+				);
+				(R == 0,J == Y1) -> 
+				(
+					assert(agent_next_action(turnLeft))
+				);
+				(R == 0,J == Y2) -> 
+				(
+					assert(agent_next_action(turnRight))
+				);
+
+				(R == 1,J == Y2) -> 
+				(
+					assert(agent_next_action(turnRight))
+				);
+				(R == 1,I == X2) -> 
+				(
+					assert(agent_next_action(turnLeft))
+				);
+				(R == 1,I == X1) -> 
+				(
+					assert(agent_next_action(turnRight))
+				);
+
+				(R == 2,I == X1) -> 
+				(
+					assert(agent_next_action(turnRight))
+				);
+				(R == 2,J == Y1) -> 
+				(
+					assert(agent_next_action(turnRight))
+				);
+				(R == 2,J == Y2) -> 
+				(
+					assert(agent_next_action(turnLeft))
+				);
+
+				(R == 3,J == Y1) -> 
+				(
+					assert(agent_next_action(turnRight))
+				);
+				(R == 3,I == X2) -> 
+				(
+					assert(agent_next_action(turnRight))
+				);
+				(R == 3,I == X1) -> 
+				(
+					assert(agent_next_action(turnLeft))
+				);
+			)
 		);
-		adjust_rotation,
-		move,
-		next_move,
-		assert(agent_next_action(move))
+
+		
 	).
 	
 
 execute_current_action :-
 	agent_next_action(Action),
 	(	 
+		(Action == move) -> (
+            move
+        ); 
 		(Action == turnRight) -> (
 			turn_right
 		); 
