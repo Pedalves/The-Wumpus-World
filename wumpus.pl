@@ -458,8 +458,7 @@ teste :-
     (is_wumpus50([X,Y])->format("\nAtacado pelo Wumpus!\n"),
     update_health([-50]),
     update_points([-50]);
-    is_gold([X,Y])->format("\nUm dos tesouros do Wumpus! Estou rico!\n"),
-    pegar;
+    is_gold([X,Y])->format("\nUm dos tesouros do Wumpus! Estou rico!\n");
     format("\n\nNada aqui\n\n")))),
     show.
 
@@ -687,7 +686,7 @@ turn_right :-
 pegar :-
     agent_location([X,Y]),
     update_points([999]),
-    retract(gold([X,Y])).
+    retractall(gold([X,Y])).
 
 
 disparar :-
@@ -875,31 +874,37 @@ ready_next_action :-
 	Y2 is Y-1,
 	(
 		%se ja calculou a melhor casa
-		(agent_best_move[I,J]) -> 
+		(agent_best_move([I,J])) -> 
 		(
-			(R == 0,I == X1,J==Y) -> 
-			(
+			is_brilho([X,Y]) -> (
 				retractall(agent_best_move(_)),
-				next_move,
-				assert(agent_next_action(move))
+				assert(agent_next_action(pegar))
 			);
-			(R == 1,I == X,J==Y1) -> 
 			(
-				retractall(agent_best_move(_)),
-				next_move,
-				assert(agent_next_action(move))
-			);
-			(R == 2,I == X2,J==Y) -> 
-			(
-				retractall(agent_best_move(_)),
-				next_move,
-				assert(agent_next_action(move))
-			);
-			(R == 3,I == X,J==Y2) -> 
-			(
-				retractall(agent_best_move(_)),
-				next_move,
-				assert(agent_next_action(move))
+				(R == 0,I == X1,J==Y) -> 
+				(
+					retractall(agent_best_move(_)),
+					next_move,
+					assert(agent_next_action(move))
+				);
+				(R == 1,I == X,J==Y1) -> 
+				(
+					retractall(agent_best_move(_)),
+					next_move,
+					assert(agent_next_action(move))
+				);
+				(R == 2,I == X2,J==Y) -> 
+				(
+					retractall(agent_best_move(_)),
+					next_move,
+					assert(agent_next_action(move))
+				);
+				(R == 3,I == X,J==Y2) -> 
+				(
+					retractall(agent_best_move(_)),
+					next_move,
+					assert(agent_next_action(move))
+				)
 			);
 			(
 				(R == 0,I == X2) -> 
@@ -953,10 +958,15 @@ ready_next_action :-
 				(
 					assert(agent_next_action(turnLeft))
 				);
+				true
 			)
 		);
-
 		
+		%calcula a melhor casa
+		
+		
+		assert(agent_best_move([1,0]))
+
 	).
 	
 
