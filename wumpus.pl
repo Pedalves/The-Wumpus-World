@@ -730,7 +730,7 @@ vento :-
 	Y1 is Y+1,
 	X2 is X-1,
 	Y2 is Y-1,
-    (agent_map([X1,Y],StatusV1,VisitedV1) ->
+    (agent_map([X1,Y],StatusV1,VisitedV1)) ->
 	(
 		(not(VisitedV1), (StatusV1 \== seguro))-> 
 		(
@@ -743,7 +743,7 @@ vento :-
 		assert(agent_map([X1,Y],talvezBuraco,false))
     ),
 
-    (agent_map([X,Y1],StatusV2,VisitedV2) ->
+    (agent_map([X,Y1],StatusV2,VisitedV2)) ->
 	(
 		(not(VisitedV2), (StatusV2 \== seguro))-> 
 		(
@@ -756,7 +756,7 @@ vento :-
 		assert(agent_map([X,Y1],talvezBuraco,false))
     ),
 
-    (agent_map([X2,Y],StatusV3,VisitedV3) ->
+    (agent_map([X2,Y],StatusV3,VisitedV3)) ->
 	(
 		(not(VisitedV3), (StatusV3 \== seguro))-> 
 		(
@@ -769,7 +769,7 @@ vento :-
 		assert(agent_map([X2,Y],talvezBuraco,false))
     ),
 
-    (agent_map([X,Y2],StatusV4,VisitedV4) ->
+    (agent_map([X,Y2],StatusV4,VisitedV4)) ->
 	(
 		(not(VisitedV4), (StatusV4 \== seguro))-> 
 		(
@@ -790,7 +790,7 @@ fedor :-
 	Y1 is Y+1,
 	X2 is X-1,
 	Y2 is Y-1,
-    (agent_map([X1,Y],StatusV1,VisitedV1) ->
+    (agent_map([X1,Y],StatusV1,VisitedV1)) ->
 	(
 		(not(VisitedV1), (StatusV1 \== seguro))-> 
 		(
@@ -803,7 +803,7 @@ fedor :-
 		assert(agent_map([X1,Y],talvezWumpus,false))
     ),
 
-    (agent_map([X,Y1],StatusV2,VisitedV2) ->
+    (agent_map([X,Y1],StatusV2,VisitedV2)) ->
 	(
 		(not(VisitedV2), (StatusV2 \== seguro))-> 
 		(
@@ -816,7 +816,7 @@ fedor :-
 		assert(agent_map([X,Y1],talvezWumpus,false))
     ),
 
-    (agent_map([X2,Y],StatusV3,VisitedV3) ->
+    (agent_map([X2,Y],StatusV3,VisitedV3)) ->
 	(
 		(not(VisitedV3), (StatusV3 \== seguro))-> 
 		(
@@ -829,7 +829,7 @@ fedor :-
 		assert(agent_map([X2,Y],talvezWumpus,false))
     ),
 
-    (agent_map([X,Y2],StatusV4,VisitedV4) ->
+    (agent_map([X,Y2],StatusV4,VisitedV4)) ->
 	(
 		(not(VisitedV4), (StatusV4 \== seguro))-> 
 		(
