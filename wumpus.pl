@@ -100,15 +100,15 @@ update_agent_location([X1,Y1]) :-
 	agent_last_location([Xo,Yo]),
     retractall( agent_last_location(_) ),
     assert( agent_last_location([X,Y]) ),
-	
-	update_agent_map([X1,Y1]),
-	
+
     ((is_vento([X1,Y1]))->format("\nQue ventania!");
     format("\nNao sinto vento nenhum")),
     ((is_fedor([X1,Y1]))->format("AH! Wumpus, o terrivel, esta proximo!");
     format("\nNenhum sinal da besta por aqui...")),
     ((is_brilho([X1,Y1]))->format("\nNem tudo que reluz e ouro... mas essa luz com certeza deve ser!\n");
-    format("\nO ouro nao parece estar aqui perto.")).
+    format("\nO ouro nao parece estar aqui perto.")),
+	
+	update_agent_map([X1,Y1]).
 
 	
 % talvezBuraco, buraco, talvezWumpus, wumpus, ouro, seguro, misterio
@@ -120,194 +120,286 @@ update_agent_map([X,Y]) :-
 	X2 is X-1,
 	Y2 is Y-1,
 	(
-		 agent_map([X,Y],Status,Visited) -> (
+		(agent_map([X,Y],Status,Visited)) -> (
 			
 			not(Visited) -> (
+
 				retractall(agent_map([X,Y],Status,Visited)),
 				assert(agent_map([X,Y],seguro,true)),
 				
-				(is_wumpus20([X,Y]); is_wumpus50([X,Y])) -> (
+				((is_wumpus20([X,Y]); is_wumpus50([X,Y])) -> (
 					retractall(agent_map([X,Y],Status,Visited)),
 					assert(agent_map([X,Y],wumpus,true))
 				);
-				true,
+				true),
 				
-				(is_vento([X,Y])) -> (
+				((is_fedor([X,Y])) -> (
 					
-					agent_map([X1,Y],StatusV1,VisitedV1),
-					(StatusV1 == talvezBuraco) -> (
-						retractall(agent_map([X1,Y],StatusV1,VisitedV1)),
-						assert(agent_map([X1,Y],buraco,VisitedV1))
+					(agent_map([X1,Y],StatusF1,VisitedF1),
+					(
+						(StatusF1 == talvezWumpus) -> (
+							retractall(agent_map([X1,Y],StatusF1,VisitedF1)),
+							assert(agent_map([X1,Y],wumpus,VisitedF1))
+						);
+						(not(VisitedF1), (StatusF1 == misterio)) -> (
+							retractall(agent_map([X1,Y],StatusF1,VisitedF1)),
+							assert(agent_map([X1,Y],talvezWumpus,VisitedF1))
+						);
+						true
 					);
-					(not(VisitedV1), (StatusV1 == misterio))-> (
-						retractall(agent_map([X1,Y],StatusV1,VisitedV1)),
-						assert(agent_map([X1,Y],talvezBuraco,VisitedV1))
-					);
-					true,
+					true),
 					
-					agent_map([X2,Y],StatusV2,VisitedV2),
-					(StatusV2 == talvezBuraco) -> (
-						retractall(agent_map([X2,Y],StatusV2,VisitedV2)),
-						assert(agent_map([X2,Y],buraco,VisitedV2))
+					(agent_map([X2,Y],StatusF2,VisitedF2),
+					(
+						(StatusF2 == talvezWumpus) -> (
+							retractall(agent_map([X2,Y],StatusF2,VisitedF2)),
+							assert(agent_map([X2,Y],wumpus,VisitedF2))
+						);
+						(not(VisitedF2), (StatusF2 == misterio)) -> (
+							retractall(agent_map([X2,Y],StatusF2,VisitedF2)),
+							assert(agent_map([X2,Y],talvezWumpus,VisitedF2))
+						);
+						true
 					);
-					(not(VisitedV2), (StatusV2 == misterio)) -> (
-						retractall(agent_map([X2,Y],StatusV2,VisitedV2)),
-						assert(agent_map([X2,Y],talvezBuraco,VisitedV2))
-					);
-					true,
+					true),
 					
-					agent_map([X,Y1],StatusV3,VisitedV3),
-					(StatusV3 == talvezBuraco) -> (
-						retractall(agent_map([X,Y1],StatusV3,VisitedV3)),
-						assert(agent_map([X,Y1],buraco,VisitedV3))
+					(agent_map([X,Y1],StatusF3,VisitedF3),
+					(
+						(StatusF3 == talvezWumpus) -> (
+							retractall(agent_map([X,Y1],StatusF3,VisitedF3)),
+							assert(agent_map([X,Y1],wumpus,VisitedF3))
+						);
+						(not(VisitedF3), (StatusF3 == misterio)) -> (
+							retractall(agent_map([X,Y1],StatusF3,VisitedF3)),
+							assert(agent_map([X,Y1],talvezWumpus,VisitedF3))
+						);
+						true
 					);
-					(not(VisitedV3), (StatusV3 == misterio)) -> (
-						retractall(agent_map([X,Y1],StatusV3,VisitedV3)),
-						assert(agent_map([X,Y1],talvezBuraco,VisitedV3))
-					);
-					true,
+					true),
 					
-					agent_map([X,Y2],StatusV4,VisitedV4),
-					(StatusV4 == talvezBuraco) -> (
-						retractall(agent_map([X,Y2],StatusV4,VisitedV4)),
-						assert(agent_map([X,Y2],buraco,VisitedV4))
+					(agent_map([X,Y2],StatusF4,VisitedF4),
+					(
+						(StatusF4 == talvezWumpus) -> (
+							retractall(agent_map([X,Y2],StatusF4,VisitedF4)),
+							assert(agent_map([X,Y2],wumpus,VisitedF4))
+						);
+						(not(VisitedF4), (StatusF4 == misterio)) -> (
+							retractall(agent_map([X,Y2],StatusF4,VisitedF4)),
+							assert(agent_map([X,Y2],talvezWumpus,VisitedF4))
+						);
+						true
 					);
-					(not(VisitedV4), (StatusV4 == misterio)) -> (
-						retractall(agent_map([X,Y2],StatusV4,VisitedV4)),
-						assert(agent_map([X,Y2],talvezBuraco,VisitedV4))
+					true)
+					
+				);
+				true),
+				
+				((is_safe([X,Y])) -> (
+					
+					(agent_map([X1,Y],StatusS1,VisitedS1),
+					(
+						not(VisitedS1) -> (
+							retractall(agent_map([X1,Y],StatusS1,VisitedS1)),
+							assert(agent_map([X1,Y],seguro,VisitedS1))
+						);
+						true
 					);
-					true
+					true),
+					
+					(agent_map([X2,Y],StatusS2,VisitedS2),
+					(
+						not(VisitedS2) -> (
+							retractall(agent_map([X2,Y],StatusS2,VisitedS2)),
+							assert(agent_map([X2,Y],seguro,VisitedS2))
+						);
+						true
+					);
+					true),
+					
+					(agent_map([X,Y1],StatusS3,VisitedS3),
+					(
+						not(VisitedS3) -> (
+							retractall(agent_map([X,Y1],StatusS3,VisitedS3)),
+							assert(agent_map([X,Y1],seguro,VisitedS3))
+						);
+						true
+					);
+					true),
+					
+					(agent_map([X,Y2],StatusS4,VisitedS4),
+					(
+						not(VisitedS4) -> (
+							retractall(agent_map([X,Y2],StatusS4,VisitedS4)),
+							assert(agent_map([X,Y2],seguro,VisitedS4))
+						);
+						true
+					);
+					true)
+				);
+				true),
+				
+				((is_vento([X,Y])) -> (
+					
+					(agent_map([X1,Y],StatusV1,VisitedV1),
+					(
+						(StatusV1 == talvezBuraco) -> (
+							retractall(agent_map([X1,Y],StatusV1,VisitedV1)),
+							assert(agent_map([X1,Y],buraco,VisitedV1))
+						);
+						(not(VisitedV1), (StatusV1 == misterio))-> (
+							retractall(agent_map([X1,Y],StatusV1,VisitedV1)),
+							assert(agent_map([X1,Y],talvezBuraco,VisitedV1))
+						);
+						true
+					);
+					true),
+					
+					(agent_map([X2,Y],StatusV2,VisitedV2),
+					(
+						(StatusV2 == talvezBuraco) -> (
+							retractall(agent_map([X2,Y],StatusV2,VisitedV2)),
+							assert(agent_map([X2,Y],buraco,VisitedV2))
+						);
+						(not(VisitedV2), (StatusV2 == misterio)) -> (
+							retractall(agent_map([X2,Y],StatusV2,VisitedV2)),
+							assert(agent_map([X2,Y],talvezBuraco,VisitedV2))
+						);
+						true
+					);
+					true),
+					
+					(agent_map([X,Y1],StatusV3,VisitedV3),
+					(
+						(StatusV3 == talvezBuraco) -> (
+							retractall(agent_map([X,Y1],StatusV3,VisitedV3)),
+							assert(agent_map([X,Y1],buraco,VisitedV3))
+						);
+						(not(VisitedV3), (StatusV3 == misterio)) -> (
+							retractall(agent_map([X,Y1],StatusV3,VisitedV3)),
+							assert(agent_map([X,Y1],talvezBuraco,VisitedV3))
+						);
+						true
+					);
+					true),
+					
+					(agent_map([X,Y2],StatusV4,VisitedV4),
+					(
+						(StatusV4 == talvezBuraco) -> (
+							retractall(agent_map([X,Y2],StatusV4,VisitedV4)),
+							assert(agent_map([X,Y2],buraco,VisitedV4))
+						);
+						(not(VisitedV4), (StatusV4 == misterio)) -> (
+							retractall(agent_map([X,Y2],StatusV4,VisitedV4)),
+							assert(agent_map([X,Y2],talvezBuraco,VisitedV4))
+						);
+						true
+					);
+					true)
 					
 				);	
-				true,
-				
-				(is_fedor([X,Y])) -> (
-					
-					agent_map([X1,Y],StatusF1,VisitedF1),
-					(StatusF1 == talvezWumpus) -> (
-						retractall(agent_map([X1,Y],StatusF1,VisitedF1)),
-						assert(agent_map([X1,Y],wumpus,VisitedF1))
-					);
-					(not(VisitedF1), (StatusF1 == misterio)) -> (
-						retractall(agent_map([X1,Y],StatusF1,VisitedF1)),
-						assert(agent_map([X1,Y],talvezWumpus,VisitedF1))
-					);
-					true,
-					
-					agent_map([X2,Y],StatusF2,VisitedF2),
-					(StatusF2 == talvezWumpus) -> (
-						retractall(agent_map([X2,Y],StatusF2,VisitedF2)),
-						assert(agent_map([X2,Y],wumpus,VisitedF2))
-					);
-					(not(VisitedF2), (StatusF2 == misterio)) -> (
-						retractall(agent_map([X2,Y],StatusF2,VisitedF2)),
-						assert(agent_map([X2,Y],talvezWumpus,VisitedF2))
-					);
-					true,
-					
-					agent_map([X,Y1],StatusF3,VisitedF3),
-					(StatusF3 == talvezWumpus) -> (
-						retractall(agent_map([X,Y1],StatusF3,VisitedF3)),
-						assert(agent_map([X,Y1],wumpus,VisitedF3))
-					);
-					(not(VisitedF3), (StatusF3 == misterio)) -> (
-						retractall(agent_map([X,Y1],StatusF3,VisitedF3)),
-						assert(agent_map([X,Y1],talvezWumpus,VisitedF3))
-					);
-					true,
-					
-					agent_map([X,Y2],StatusF4,VisitedF4),
-					(StatusF4 == talvezWumpus) -> (
-						retractall(agent_map([X,Y2],StatusF4,VisitedF4)),
-						assert(agent_map([X,Y2],wumpus,VisitedF4))
-					);
-					(not(VisitedF4), (StatusF4 == misterio)) -> (
-						retractall(agent_map([X,Y2],StatusF4,VisitedF4)),
-						assert(agent_map([X,Y2],talvezWumpus,VisitedF4))
-					);
-					true
-					
-				);
-				true,
-				
-				(is_safe([X,Y])) -> (
-					
-					agent_map([X1,Y],StatusS1,VisitedS1),
-					not(VisitedS1) -> (
-						retractall(agent_map([X1,Y],StatusS1,VisitedS1)),
-						assert(agent_map([X1,Y],seguro,VisitedS1))
-					);
-					true,
-					
-					agent_map([X2,Y],StatusS2,VisitedS2),
-					not(VisitedS2) -> (
-						retractall(agent_map([X2,Y],StatusS2,VisitedS2)),
-						assert(agent_map([X2,Y],seguro,VisitedS2))
-					);
-					true,
-					
-					agent_map([X,Y1],StatusS3,VisitedS3),
-					not(VisitedS3) -> (
-						retractall(agent_map([X,Y1],StatusS3,VisitedS3)),
-						assert(agent_map([X,Y1],seguro,VisitedS3))
-					);
-					true,
-					
-					agent_map([X,Y2],StatusS4,VisitedS4),
-					not(VisitedS4) -> (
-						retractall(agent_map([X,Y2],StatusS4,VisitedS4)),
-						assert(agent_map([X,Y2],seguro,VisitedS4))
-					);
-					true
-				);
-				true,
+				true),
 				
 				(
-					
-					not(agent_map([X1,Y],_,_)) -> (
-						retractall(agent_map([X1,Y],_,_)),
+					(not(agent_map([X1,Y],_,_)) -> (
+
+						(is_fedor([X,Y])) -> (
+							assert(agent_map([X1,Y],talvezWumpus,false))
+						);
+						
+						(is_vento([X,Y])) -> (
+							assert(agent_map([X1,Y],talvezBuraco,false))
+						);
 						assert(agent_map([X1,Y],misterio,false))
 					);
-					true,
+					true),
 					
-					not(agent_map([X2,Y],_,_)) -> (
-						retractall(agent_map([X2,Y],_,_)),
+					(not(agent_map([X2,Y],_,_)) -> (
+					
+						(is_fedor([X,Y])) -> (
+							assert(agent_map([X2,Y],talvezWumpus,false))
+						);
+						
+						(is_vento([X,Y])) -> (
+							assert(agent_map([X2,Y],talvezBuraco,false))
+						);
 						assert(agent_map([X2,Y],misterio,false))
 					);
-					true,
+					true),
 					
-					not(agent_map([X,Y1],_,_)) -> (
-						retractall(agent_map([X,Y1],_,_)),
+					(not(agent_map([X,Y1],_,_)) -> (
+				
+						(is_fedor([X,Y])) -> (
+							assert(agent_map([X,Y1],talvezWumpus,false))
+						);
+						
+						(is_vento([X,Y])) -> (
+							assert(agent_map([X,Y1],talvezBuraco,false))
+						);
 						assert(agent_map([X,Y1],misterio,false))
 					);
-					true,
-					
-					not(agent_map([X,Y2],_,_)) -> (
-						retractall(agent_map([X,Y2],_,_)),
+					true),
+
+					(not(agent_map([X,Y2],_,_)) -> (
+						
+						(is_fedor([X,Y])) -> (
+							assert(agent_map([X,Y2],talvezWumpus,false))
+						);
+						
+						(is_vento([X,Y])) -> (
+							assert(agent_map([X,Y2],talvezBuraco,false))
+						);
 						assert(agent_map([X,Y2],misterio,false))
+						
 					);
+					true),
 					true
 					
 				)
 				
-			)
-			
+			);
+			true
 		);
 		
 		(
 			assert(agent_map([X,Y],seguro,true)),
 			
-			assert(agent_map([X1,Y],misterio,false)),
-			
-			assert(agent_map([X2,Y],misterio,false)),
-		
-			assert(agent_map([X,Y1],misterio,false)),
+			(
+				(is_fedor([X,Y])) -> (
+				
+					assert(agent_map([X1,Y],talvezWumpus,false)),
+					
+					assert(agent_map([X2,Y],talvezWumpus,false)),
+				
+					assert(agent_map([X,Y1],talvezWumpus,false)),
 
-			assert(agent_map([X,Y2],misterio,false))
+					assert(agent_map([X,Y2],talvezWumpus,false))
+				);
+				
+				(is_vento([X,Y])) -> (
+				
+					assert(agent_map([X1,Y],talvezBuraco,false)),
+					
+					assert(agent_map([X2,Y],talvezBuraco,false)),
+				
+					assert(agent_map([X,Y1],talvezBuraco,false)),
 
+					assert(agent_map([X,Y2],talvezBuraco,false))
+				);
+				
+				(
+					assert(agent_map([X1,Y],misterio,false)),
+					
+					assert(agent_map([X2,Y],misterio,false)),
+				
+					assert(agent_map([X,Y1],misterio,false)),
+
+					assert(agent_map([X,Y2],misterio,false))
+				)
+			)
 		)
-		
-	).
+
+	),
+	!.
 	
 	
 update_agent_rotation([X1]) :-
