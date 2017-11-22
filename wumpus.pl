@@ -976,7 +976,8 @@ ready_next_action :-
 			(
 				(R == 0,I == X1,J==Y) -> 
 				(
-					(StatusB == wumpus)-> 
+    				ammo([M]),
+					(StatusB == wumpus, M > 0)-> 
                     (
                         assert(agent_next_action(shoot))
                     );
@@ -988,7 +989,8 @@ ready_next_action :-
 				);
 				(R == 1,I == X,J==Y1) -> 
 				(
-					(StatusB == wumpus)-> 
+    				ammo([M]),
+					(StatusB == wumpus, M > 0)-> 
                     (
                         assert(agent_next_action(shoot))
                     );
@@ -1000,7 +1002,8 @@ ready_next_action :-
 				);
 				(R == 2,I == X2,J==Y) -> 
 				(
-					(StatusB == wumpus)-> 
+    				ammo([M]),
+					(StatusB == wumpus, M > 0)->
                     (
                         assert(agent_next_action(shoot))
                     );
@@ -1012,7 +1015,8 @@ ready_next_action :-
 				);
 				(R == 3,I == X,J==Y2) -> 
 				(
-					(StatusB == wumpus)-> 
+    				ammo([M]),
+					(StatusB == wumpus, M > 0)->
                     (
                         assert(agent_next_action(shoot))
                     );
@@ -1338,7 +1342,8 @@ ready_next_action :-
 						(
 							(R == 0,I2 == X1,J2==Y) -> 
 							(
-								(Status1 == wumpus)-> 
+			    				ammo([M1]),
+								(Status1 == wumpus, M1 > 0)-> 
 		                        (
 		                            assert(agent_next_action(shoot))
 		                        );
@@ -1350,7 +1355,8 @@ ready_next_action :-
 							);
 							(R == 1,I2 == X,J2==Y1) -> 
 							(
-								(Status3 == wumpus)-> 
+			    				ammo([M1]),
+								(Status3 == wumpus, M1 > 0)-> 
 								(
                             		assert(agent_next_action(shoot))
                         		);
@@ -1362,7 +1368,8 @@ ready_next_action :-
 							);
 							(R == 2,I2 == X2,J2==Y) -> 
 							(
-								(Status2 == wumpus)-> 
+			    				ammo([M1]),
+								(Status2 == wumpus, M1 > 0)->
 		                        (
 		                            assert(agent_next_action(shoot))
 		                        );
@@ -1374,7 +1381,8 @@ ready_next_action :-
 							);
 							(R == 3,I2 == X,J2==Y2) -> 
 							(
-								(Status4 == wumpus)-> 
+			    				ammo([M1]),
+								(Status4 == wumpus, M1 > 0)-> 
 		                        (
 		                            assert(agent_next_action(shoot))
 		                        );
