@@ -444,7 +444,25 @@ update_agent_rotation([X1]) :-
     agent_rotation([X]),
     retractall( agent_rotation(_) ),
     assert( agent_rotation([X1]) ),
-    format("\nEstou olhando para ~p\n", [X1]).
+    (
+    	(X1 == 0) ->
+    	(
+    		format("\nEstou olhando para o leste\n")
+    	);
+    	(X1 == 1) ->
+    	(
+    		format("\nEstou olhando para o norte\n")
+    	);
+    	(X1 == 2) ->
+    	(
+    		format("\nEstou olhando para o oeste\n")
+    	);
+    	(X1 == 3) ->
+    	(
+    		format("\nEstou olhando para o sul\n")
+    	);
+    	true
+    ).
 
 update_health([H]) :-
     agent_health([V]),
