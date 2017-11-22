@@ -28,6 +28,7 @@ start :-
 
 derrota :-
     format("\nO aventureiro encontrou um fim inesperado.\n\n Placar final\n"),
+    assert(gameRunning(false)),
     show.
 
 fim :-
