@@ -44,6 +44,10 @@
             this.mapView.TabStop = false;
             this.mapView.Paint += new System.Windows.Forms.PaintEventHandler(this.mapView_Paint);
             // 
+            // gameTimer
+            // 
+            this.gameTimer.Interval = 50;
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);

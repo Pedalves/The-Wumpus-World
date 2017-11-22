@@ -765,7 +765,7 @@ pegar :-
     retractall(agent_collected(_)),
     assert(agent_collected([G1])),
     (
-    	(G1 > 1) ->
+    	(G1 > 0) ->
     	(
     		retractall(agent_back(_)),
     		assert(agent_back(true))
@@ -1216,7 +1216,7 @@ ready_next_action :-
 						
 											
 						(
-    						random_between(0,6,Rand),
+    						random_between(0,10,Rand),
     						(
     							(Rand == 0) ->
     							(

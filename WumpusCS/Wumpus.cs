@@ -94,8 +94,14 @@ namespace WumpusCS
 
             if(action == "shoot")
             {
+                int tempX = _agent.X;
+                int tempY = _agent.Y;
+
+                _agent.Move();
+
                 string health = "";
-                PlQuery wumpus20Query = new PlQuery("wumpus20_health([Vida], [" + _agent.X.ToString() + "," + _agent.Y.ToString() + "])");
+
+                PlQuery wumpus20Query = new PlQuery("wumpus20_health([Vida], [" + (_agent.X / 30).ToString() + "," + (_agent.Y / 30).ToString() + "])");
 
                 foreach (PlQueryVariables s in wumpus20Query.SolutionVariables)
                 {
@@ -104,7 +110,7 @@ namespace WumpusCS
 
                 wumpus20Query.Dispose();
 
-                PlQuery wumpus50Query = new PlQuery("wumpus50_health([Vida], [" + _agent.X.ToString() + "," + _agent.Y.ToString() + "])");
+                PlQuery wumpus50Query = new PlQuery("wumpus50_health([Vida], [" + (_agent.X / 30).ToString() + "," + (_agent.Y / 30).ToString() + "])");
 
                 foreach (PlQueryVariables s in wumpus50Query.SolutionVariables)
                 {
@@ -112,6 +118,21 @@ namespace WumpusCS
                 }
 
                 wumpus50Query.Dispose();
+
+                try
+                {
+                    if (Int32.Parse(health) <= 0)
+                    {
+                        _agent.Kill();
+                    }
+                }
+                catch
+                {
+                    _agent.Kill();
+                }
+
+                _agent.X = tempX;
+                _agent.Y = tempY;
             }
 
             _agent.NewAction(action);

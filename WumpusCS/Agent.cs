@@ -70,7 +70,7 @@ namespace WumpusCS
             } 
         }
 
-        private void Move()
+        public void Move()
         {
             switch (_direction)
             {
@@ -130,6 +130,26 @@ namespace WumpusCS
                     break;
                 default:
                     break;
+            }
+        }
+
+        internal void Kill()
+        {
+            for (int i = 0; i < 2; i++)
+            {
+                if (_map.Wumpus20[i, 0] == X / 30 && _map.Wumpus20[i, 1] == Y / 30)
+                {
+                    _map.Wumpus20[i, 0] = -1;
+                    _map.Wumpus20[i, 1] = -1;
+                }
+            }
+            for (int i = 0; i < 2; i++)
+            {
+                if (_map.Wumpus50[i, 0] == X / 30 && _map.Wumpus50[i, 1] == Y / 30)
+                {
+                    _map.Wumpus50[i, 0] = -1;
+                    _map.Wumpus50[i, 1] = -1;
+                }
             }
         }
     }
