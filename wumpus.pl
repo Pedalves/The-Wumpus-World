@@ -1314,15 +1314,15 @@ ready_next_action :-
     							(Rand == 0) ->
     							(
     								assert(agent_best_move([X1,Y]))
-    							)
+    							);
     							(Rand == 1) ->
     							(
     								assert(agent_best_move([X2,Y]))
-    							)
+    							);
     							(Rand == 2) ->
     							(
     								assert(agent_best_move([X,Y1]))
-    							)
+    							);
     							(Rand == 3) ->
     							(
     								assert(agent_best_move([X,Y2]))
