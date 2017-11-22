@@ -1218,19 +1218,19 @@ ready_next_action :-
 						(
     						random_between(0,10,Rand),
     						(
-    							(Rand == 0) ->
+    							(Rand == 0, not(Status1 == buraco)) ->
     							(
     								assert(agent_best_move([X1,Y]))
     							);
-    							(Rand == 1) ->
+    							(Rand == 1, not(Status2 == buraco)) ->
     							(
     								assert(agent_best_move([X2,Y]))
     							);
-    							(Rand == 2) ->
+    							(Rand == 2, not(Status3 == buraco)) ->
     							(
     								assert(agent_best_move([X,Y1]))
     							);
-    							(Rand == 3) ->
+    							(Rand == 3, not(Status4 == buraco)) ->
     							(
     								assert(agent_best_move([X,Y2]))
     							);
