@@ -1,4 +1,4 @@
-%declaracao_das_variaveis_dinamicas.
+--%declaracao_das_variaveis_dinamicas.
 :- dynamic(
             [agent_location/1],
 			[agent_last_location/1],
@@ -28,6 +28,7 @@ start :-
 
 derrota :-
     format("\nO aventureiro encontrou um fim inesperado.\n\n Placar final\n"),
+    retractall(gameRunning(_)),
     assert(gameRunning(false)),
     show.
 
