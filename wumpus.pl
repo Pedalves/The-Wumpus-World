@@ -466,18 +466,32 @@ update_wumpus20_health([D],[X,Y]) :-
     format("\n\nvalores nv = ~p, v = ~p, d = ~p\n\n", [NV, V, D]),
     retractall(wumpus20_health([V],[X,Y])),
     assert(wumpus20_health([NV],[X,Y])),
-    ((is_wumpus20_dead([NV]))->retract(wumpus20_location([X,Y])),
-    format("\nE com esse grito horrendo, a tao temida besta esta morta!\n");
-    format("\nConsegui atingir a fera, mas o monstro ainda respira e parece irritado! ~p de dano causado, deixando o wumpus com ~p de vida\n ", [D,NV])).
+    (
+    	(is_wumpus20_dead([NV]))->
+    	(
+    		retract(wumpus20_location([X,Y])),
+    		format("\nE com esse grito horrendo, a tao temida besta esta morta!\n")
+    		agent_map([X,Y],Status,Visited),
+    		assert(agent_map([X,Y],seguro,Visited))
+    	);
+    	format("\nConsegui atingir a fera, mas o monstro ainda respira e parece irritado! ~p de dano causado, deixando o wumpus com ~p de vida\n ", [D,NV])
+    ).
 
 update_wumpus50_health([D],[X,Y]) :-
     wumpus50_health([V],[X,Y]),
     NV is V+D,
     retractall(wumpus50_health([V],[X,Y])),
     assert(wumpus50_health([NV],[X,Y])),
-    ((is_wumpus50_dead([NV]))->retract(wumpus50_location([X,Y])),
-    format("\nE com esse grito horrendo, a tao temida besta esta morta!\n");
-    format("\nConsegui atingir a fera, mas o monstro ainda respira e parece irritado!\n ")).
+    (
+    	(is_wumpus50_dead([NV]))->
+    	(
+    		retract(wumpus50_location([X,Y])),
+    		format("\nE com esse grito horrendo, a tao temida besta esta morta!\n")
+    		agent_map([X,Y],Status,Visited),
+    		assert(agent_map([X,Y],seguro,Visited))
+    	);
+    	format("\nConsegui atingir a fera, mas o monstro ainda respira e parece irritado! ~p de dano causado, deixando o wumpus com ~p de vida\n ", [D,NV])
+    ).
 
 update_action(action) :-
 	assert(agent_next_action(action)).
