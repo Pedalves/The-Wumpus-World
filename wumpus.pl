@@ -1186,65 +1186,148 @@ ready_next_action :-
 					agent_map([X, Y1], Status3, Visited3),
 					agent_map([X, Y2], Status4, Visited4),
 					(
-						(Status1 == misterio, X1 =< 11)-> (
+						(Status1 == misterio, X1 =< 11, not(Visited1))-> (
 							assert(agent_best_move([X1,Y]))
 						);
-						(Status2 == misterio, X2 >= 0)-> (
+						(Status2 == misterio, X2 >= 0, not(Visited2))-> (
 							assert(agent_best_move([X2,Y]))
 						);
-						(Status3 == misterio, Y1 =< 11)-> (
+						(Status3 == misterio, Y1 =< 11, not(Visited3))-> (
 							assert(agent_best_move([X,Y1]))
 						);
-						(Status4 == misterio, Y2 >= 0)-> (
+						(Status4 == misterio, Y2 >= 0, not(Visited4))-> (
 							assert(agent_best_move([X,Y2]))
 						);
-						(Status1 == seguro, X1 =< 11)-> (
+						(Status1 == seguro, X1 =< 11, not(Visited1))-> (
 							assert(agent_best_move([X1,Y]))
 						);
-						(Status2 == seguro, X2 >= 0)-> (
+						(Status2 == seguro, X2 >= 0, not(Visited2))-> (
 							assert(agent_best_move([X2,Y]))
 						);
-						(Status3 == seguro, Y1 =< 11)-> (
+						(Status3 == seguro, Y1 =< 11, not(Visited3))-> (
 							assert(agent_best_move([X,Y1]))
 						);
-						(Status4 == seguro, Y2 >= 0)-> (
+						(Status4 == seguro, Y2 >= 0, not(Visited4))-> (
 							assert(agent_best_move([X,Y2]))
 						);
-						(Status1 == talvezWumpus, X1 =< 11)-> (
+						(Status1 == talvezWumpus, X1 =< 11, not(Visited1))-> (
 							assert(agent_best_move([X1,Y]))
 						);
-						(Status2 == talvezWumpus, X2 >= 0)-> (
+						(Status2 == talvezWumpus, X2 >= 0, not(Visited2))-> (
 							assert(agent_best_move([X2,Y]))
 						);
-						(Status3 == talvezWumpus, Y1 =< 11)-> (
+						(Status3 == talvezWumpus, Y1 =< 11, not(Visited3))-> (
 							assert(agent_best_move([X,Y1]))
 						);
-						(Status4 == talvezWumpus, Y2 >= 0)-> (
+						(Status4 == talvezWumpus, Y2 >= 0, not(Visited4))-> (
 							assert(agent_best_move([X,Y2]))
 						);
-						(Status1 == Wumpus, X1 =< 11)-> (
+						(Status1 == Wumpus, X1 =< 11, not(Visited1))-> (
 		                    assert(agent_best_move([X1,Y]))
 		                );
-		                (Status2 == Wumpus, X2 >= 0)-> (
+		                (Status2 == Wumpus, X2 >= 0, not(Visited2))-> (
 		                    assert(agent_best_move([X2,Y]))
 		                );
-		                (Status3 == Wumpus, Y1 =< 11)-> (
+		                (Status3 == Wumpus, Y1 =< 11, not(Visited3))-> (
 		                    assert(agent_best_move([X,Y1]))
 		                );
-		                (Status4 == Wumpus, Y2 >= 0)-> (
+		                (Status4 == Wumpus, Y2 >= 0, not(Visited4))-> (
 		                    assert(agent_best_move([X,Y2]))
 		                );
-						(Status1 == talvezBuraco, X1 =< 11)-> (
+						(Status1 == talvezBuraco, X1 =< 11, not(Visited1))-> (
 							assert(agent_best_move([X1,Y]))
 						);
-						(Status2 == talvezBuraco, X2 >= 0)-> (
+						(Status2 == talvezBuraco, X2 >= 0, not(Visited2))-> (
 							assert(agent_best_move([X2,Y]))
 						);
-						(Status3 == talvezBuraco, Y1 =< 11)-> (
+						(Status3 == talvezBuraco, Y1 =< 11, not(Visited3))-> (
 							assert(agent_best_move([X,Y1]))
 						);
-						(Status4 == talvezBuraco, Y2 >= 0)-> (
+						(Status4 == talvezBuraco, Y2 >= 0, not(Visited4))-> (
 							assert(agent_best_move([X,Y2]))
+						);
+
+						(Status1 == misterio, X1 =< 11, Visited1)-> (
+							assert(agent_best_move([X1,Y]))
+						);
+						(Status2 == misterio, X2 >= 0, Visited2)-> (
+							assert(agent_best_move([X2,Y]))
+						);
+						(Status3 == misterio, Y1 =< 11, Visited3)-> (
+							assert(agent_best_move([X,Y1]))
+						);
+						(Status4 == misterio, Y2 >= 0, Visited4)-> (
+							assert(agent_best_move([X,Y2]))
+						);
+						(Status1 == seguro, X1 =< 11, Visited1)-> (
+							assert(agent_best_move([X1,Y]))
+						);
+						(Status2 == seguro, X2 >= 0, Visited2)-> (
+							assert(agent_best_move([X2,Y]))
+						);
+						(Status3 == seguro, Y1 =< 11, Visited3)-> (
+							assert(agent_best_move([X,Y1]))
+						);
+						(Status4 == seguro, Y2 >= 0, Visited4)-> (
+							assert(agent_best_move([X,Y2]))
+						);
+						(Status1 == talvezWumpus, X1 =< 11, Visited1)-> (
+							assert(agent_best_move([X1,Y]))
+						);
+						(Status2 == talvezWumpus, X2 >= 0, Visited2)-> (
+							assert(agent_best_move([X2,Y]))
+						);
+						(Status3 == talvezWumpus, Y1 =< 11, Visited3)-> (
+							assert(agent_best_move([X,Y1]))
+						);
+						(Status4 == talvezWumpus, Y2 >= 0, Visited4)-> (
+							assert(agent_best_move([X,Y2]))
+						);
+						(Status1 == Wumpus, X1 =< 11, Visited1)-> (
+		                    assert(agent_best_move([X1,Y]))
+		                );
+		                (Status2 == Wumpus, X2 >= 0, Visited2)-> (
+		                    assert(agent_best_move([X2,Y]))
+		                );
+		                (Status3 == Wumpus, Y1 =< 11, Visited3)-> (
+		                    assert(agent_best_move([X,Y1]))
+		                );
+		                (Status4 == Wumpus, Y2 >= 0, Visited4)-> (
+		                    assert(agent_best_move([X,Y2]))
+		                );
+						(Status1 == talvezBuraco, X1 =< 11, Visited1)-> (
+							assert(agent_best_move([X1,Y]))
+						);
+						(Status2 == talvezBuraco, X2 >= 0, Visited2)-> (
+							assert(agent_best_move([X2,Y]))
+						);
+						(Status3 == talvezBuraco, Y1 =< 11, Visited3)-> (
+							assert(agent_best_move([X,Y1]))
+						);
+						(Status4 == talvezBuraco, Y2 >= 0, Visited4)-> (
+							assert(agent_best_move([X,Y2]))
+						);
+
+						(
+    						random_between(0,3,Rand),
+    						(
+    							(Rand == 0) ->
+    							(
+    								assert(agent_best_move([X1,Y]))
+    							)
+    							(Rand == 1) ->
+    							(
+    								assert(agent_best_move([X2,Y]))
+    							)
+    							(Rand == 2) ->
+    							(
+    								assert(agent_best_move([X,Y1]))
+    							)
+    							(Rand == 3) ->
+    							(
+    								assert(agent_best_move([X,Y2]))
+    							)
+    						)
 						);
 						true
 					),
