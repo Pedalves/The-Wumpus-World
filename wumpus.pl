@@ -23,8 +23,7 @@
             [gameRunning/1],
             [ammo/1] ).
 start :-
-    init_agent,
-    init_world_teste.
+    init_agent.
 
 derrota :-
     format("\nO aventureiro encontrou um fim inesperado.\n\n Placar final\n"),
@@ -90,11 +89,11 @@ init_world_teste :-
     assert(wumpus20_location([3,1])),
     assert(wumpus20_location([11, 10])),
     assert(wumpus50_location([4,3])),
-    assert(wumpus50_location([5,1])),
+    assert(wumpus50_location([11,1])),
     assert(wumpus20_health([100], [3,1])),
     assert(wumpus20_health([100], [11,10])),
     assert(wumpus50_health([100], [4,3])),
-    assert(wumpus50_health([100], [5,1])).
+    assert(wumpus50_health([100], [11,1])).
 
 
 %verificaçao dos acontecimentos ou mortes.
@@ -483,14 +482,13 @@ update_points([P]) :-
 update_wumpus20_health([D],[X,Y]) :-
     wumpus20_health([V],[X,Y]),
     NV is V+D,
-    format("\n\nvalores nv = ~p, v = ~p, d = ~p\n\n", [NV, V, D]),
     retractall(wumpus20_health([V],[X,Y])),
     assert(wumpus20_health([NV],[X,Y])),
     (
     	(is_wumpus20_dead([NV]))->
     	(
     		retract(wumpus20_location([X,Y])),
-    		format("\nE com esse grito horrendo, a tao temida besta esta morta!\n")
+    		format("\nE com esse grito horrendo, a tao temida besta esta morta!\n"),
     		agent_map([X,Y],Status,Visited),
     		assert(agent_map([X,Y],seguro,Visited))
     	);
@@ -506,7 +504,7 @@ update_wumpus50_health([D],[X,Y]) :-
     	(is_wumpus50_dead([NV]))->
     	(
     		retract(wumpus50_location([X,Y])),
-    		format("\nE com esse grito horrendo, a tao temida besta esta morta!\n")
+    		format("\nE com esse grito horrendo, a tao temida besta esta morta!\n"),
     		agent_map([X,Y],Status,Visited),
     		assert(agent_map([X,Y],seguro,Visited))
     	);
@@ -767,7 +765,7 @@ pegar :-
     retractall(agent_collected(_)),
     assert(agent_collected([G1])),
     (
-    	(G1 > 0) ->
+    	(G1 > 1) ->
     	(
     		retractall(agent_back(_)),
     		assert(agent_back(true))
@@ -1202,7 +1200,7 @@ ready_next_action :-
 						);
 						(Status4 == misterio, Y2 >= 0, not(Visited4))-> (
 							assert(agent_best_move([X,Y2]))
-						);
+						);						
 						(Status1 == seguro, X1 =< 11, not(Visited1))-> (
 							assert(agent_best_move([X1,Y]))
 						);
@@ -1215,6 +1213,45 @@ ready_next_action :-
 						(Status4 == seguro, Y2 >= 0, not(Visited4))-> (
 							assert(agent_best_move([X,Y2]))
 						);
+						
+											
+						(
+    						random_between(0,6,Rand),
+    						(
+    							(Rand == 0) ->
+    							(
+    								assert(agent_best_move([X1,Y]))
+    							);
+    							(Rand == 1) ->
+    							(
+    								assert(agent_best_move([X2,Y]))
+    							);
+    							(Rand == 2) ->
+    							(
+    								assert(agent_best_move([X,Y1]))
+    							);
+    							(Rand == 3) ->
+    							(
+    								assert(agent_best_move([X,Y2]))
+    							);
+								false
+    						)
+						);
+						
+						(Status1 == seguro, X1 =< 11, Visited1)-> (
+							assert(agent_best_move([X1,Y]))
+						);
+						(Status2 == seguro, X2 >= 0, Visited2)-> (
+							assert(agent_best_move([X2,Y]))
+						);
+						(Status3 == seguro, Y1 =< 11, Visited3)-> (
+							assert(agent_best_move([X,Y1]))
+						);
+						(Status4 == seguro, Y2 >= 0, Visited4)-> (
+							assert(agent_best_move([X,Y2]))
+						);
+						
+						
 						(Status1 == talvezWumpus, X1 =< 11, not(Visited1))-> (
 							assert(agent_best_move([X1,Y]))
 						);
@@ -1249,31 +1286,6 @@ ready_next_action :-
 							assert(agent_best_move([X,Y1]))
 						);
 						(Status4 == talvezBuraco, Y2 >= 0, not(Visited4))-> (
-							assert(agent_best_move([X,Y2]))
-						);
-
-						(Status1 == misterio, X1 =< 11, Visited1)-> (
-							assert(agent_best_move([X1,Y]))
-						);
-						(Status2 == misterio, X2 >= 0, Visited2)-> (
-							assert(agent_best_move([X2,Y]))
-						);
-						(Status3 == misterio, Y1 =< 11, Visited3)-> (
-							assert(agent_best_move([X,Y1]))
-						);
-						(Status4 == misterio, Y2 >= 0, Visited4)-> (
-							assert(agent_best_move([X,Y2]))
-						);
-						(Status1 == seguro, X1 =< 11, Visited1)-> (
-							assert(agent_best_move([X1,Y]))
-						);
-						(Status2 == seguro, X2 >= 0, Visited2)-> (
-							assert(agent_best_move([X2,Y]))
-						);
-						(Status3 == seguro, Y1 =< 11, Visited3)-> (
-							assert(agent_best_move([X,Y1]))
-						);
-						(Status4 == seguro, Y2 >= 0, Visited4)-> (
 							assert(agent_best_move([X,Y2]))
 						);
 						(Status1 == talvezWumpus, X1 =< 11, Visited1)-> (
@@ -1311,28 +1323,6 @@ ready_next_action :-
 						);
 						(Status4 == talvezBuraco, Y2 >= 0, Visited4)-> (
 							assert(agent_best_move([X,Y2]))
-						);
-
-						(
-    						random_between(0,3,Rand),
-    						(
-    							(Rand == 0) ->
-    							(
-    								assert(agent_best_move([X1,Y]))
-    							);
-    							(Rand == 1) ->
-    							(
-    								assert(agent_best_move([X2,Y]))
-    							);
-    							(Rand == 2) ->
-    							(
-    								assert(agent_best_move([X,Y1]))
-    							);
-    							(Rand == 3) ->
-    							(
-    								assert(agent_best_move([X,Y2]))
-    							)
-    						)
 						);
 						true
 					),
